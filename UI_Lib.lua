@@ -12,8 +12,7 @@ function Drag(obj)
 
     local function update(input)
         local delta = input.Position - dragStart
-        obj.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X,
-                                 startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+        obj.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
     end
 
     obj.InputBegan:Connect(function(input)
@@ -44,8 +43,7 @@ function Drag(obj)
 end
 
 function Scale(object, extra)
-    local Offs = object:FindFirstChild("UIListLayout") and
-                     object.UIListLayout.Padding.Offset or 0
+    local Offs = object:FindFirstChild("UIListLayout") and object.UIListLayout.Padding.Offset or 0
     local Y = 0
     for i, v in pairs(object:GetChildren()) do
         if not v:IsA("UIListLayout") then
@@ -71,9 +69,17 @@ function RealZzLib:CreateMain(GameName)
     local TabContainer = Instance.new("ScrollingFrame")
     local Containers = Instance.new("Frame")
     local UIListLayout = Instance.new("UIListLayout")
+    
+    if syn then
+    syn.protect_gui(Main)
+    Main.Parent = game.CoreGui
+    elseif hiddenUI then
+    Main.Parent = hiddenUI()
+    else
+    Main.Parent = game.CoreGui
+    end
 
     Main.Name = GameName
-    Main.Parent = game.CoreGui
     Main.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
     mainbackground.Name = "mainbackground"
