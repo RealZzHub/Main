@@ -5,4 +5,4 @@ Official RealZzHub Github Page!
 loadstring(game:HttpGet("https://raw.githubusercontent.com/RealZzHub/RealZzHub/main/Main.lua"))()
 ```
 
-![Discord Banner 4](https://discordapp.com/api/guilds/815574141931094037/widget.png?style=banner2)
+![Discord](https://discordapp.com/api/guilds/815574141931094037/widget.png?style=banner2)
