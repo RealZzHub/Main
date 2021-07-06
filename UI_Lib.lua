@@ -124,10 +124,10 @@ function RealZzLib:CreateMain(GameName)
     TabContainer.Size = UDim2.new(0, 198, 0, 289)
     TabContainer.ScrollBarThickness = 5
     TabContainer.ChildAdded:Connect(function(child) Scale(TabContainer) end)
-    TabContainer.Frame.Drop.ChildRemoved:Connect(function(child)
+    TabContainer.ChildRemoved:Connect(function(child)
         Scale(TabContainer, 3)
     end)
-    TabContainer.Frame:GetPropertyChangedSignal("Size"):Connect(function()
+    TabContainer:GetPropertyChangedSignal("Size"):Connect(function()
         Scale(TabContainer, 3)
     end)
 
@@ -203,10 +203,10 @@ function RealZzLib:CreateMain(GameName)
         Tab1.ScrollBarThickness = 5
         Tab1.VerticalScrollBarPosition = Enum.VerticalScrollBarPosition.Left
         Tab1.ChildAdded:Connect(function(child) Scale(Tab1) end)
-        TabContainer.Frame.Drop.ChildRemoved:Connect(function(child)
+        Tab1.ChildRemoved:Connect(function(child)
             Scale(Tab1, 3)
         end)
-        TabContainer.Frame:GetPropertyChangedSignal("Size"):Connect(function()
+        Tab1:GetPropertyChangedSignal("Size"):Connect(function()
             Scale(Tab1, 3)
         end)
 
