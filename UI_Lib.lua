@@ -1,6 +1,9 @@
 -- Hello fat skiddo this is a shitty example so fuck off
 
 ---misc---
+local zzMouse = game.Players.LocalPlayer:GetMouse()
+local zzUIS = game:GetService("UserInputService")
+
 function Ripple(Button) --- Thanks xbox#0109
     Button.AutoButtonColor = false
     Button.ClipsDescendants = true
@@ -357,6 +360,121 @@ function RealZzLib:CreateMain(GameName)
             UICorner_7.CornerRadius = UDim.new(0, 6)
             UICorner_7.Parent = ButtonButton
         end
+        
+        function MainLibrary:NewLabel(LabelName)
+            local LName = LabelName
+            
+            local Label = Instance.new("TextLabel")
+
+            Label.Name = "Label"
+            Label.Parent = Tab1
+            Label.BackgroundColor3 = Color3.fromRGB(47, 47, 47)
+            Label.BorderColor3 = Color3.fromRGB(27, 42, 53)
+            Label.Position = UDim2.new(0.0340236686, 0, 0, 0)
+            Label.Size = UDim2.new(0, 315, 0, 27)
+            Label.Font = Enum.Font.Gotham
+            Label.Text = tostring(LName)
+            Label.TextColor3 = Color3.fromRGB(255, 255, 255)
+            Label.TextSize = 16.000
+            
+            
+        end
+
+function MainLibrary:Slider(SliderName, MinVal, MaxVal, callback, StartValue)
+local SName = SliderName
+local Val;
+
+local SliderContainer = Instance.new("Frame")
+local UICorner_8 = Instance.new("UICorner")
+local SliderName = Instance.new("TextLabel")
+local SliderValue = Instance.new("TextLabel")
+local Slider = Instance.new("TextButton")
+local SliderIn = Instance.new("Frame")
+local UICorner_9 = Instance.new("UICorner")
+local UICorner_10 = Instance.new("UICorner")
+ 
+SliderContainer.Name = "SliderContainer"
+SliderContainer.Parent = Tab1
+SliderContainer.BackgroundColor3 = Color3.fromRGB(47, 47, 47)
+SliderContainer.Position = UDim2.new(0.0340236686, 0, 0.361739129, 0)
+SliderContainer.Size = UDim2.new(0, 315, 0, 37)
+
+UICorner_8.CornerRadius = UDim.new(0, 6)
+UICorner_8.Parent = SliderContainer
+
+SliderName.Name = "SliderName"
+SliderName.Parent = SliderContainer
+SliderName.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+SliderName.BackgroundTransparency = 1.000
+SliderName.Position = UDim2.new(0.0190476198, 0, 0, 0)
+SliderName.Size = UDim2.new(0, 187, 0, 23)
+SliderName.Font = Enum.Font.Gotham
+SliderName.TextColor3 = Color3.fromRGB(255, 255, 255)
+SliderName.TextSize = 18.000
+SliderName.TextXAlignment = Enum.TextXAlignment.Left
+SliderName.Text = tostring(SName)
+
+SliderValue.Name = "SliderValue"
+SliderValue.Parent = SliderContainer
+SliderValue.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+SliderValue.BackgroundTransparency = 1.000
+SliderValue.Position = UDim2.new(0.61587292, 0, 0, 0)
+SliderValue.Size = UDim2.new(0, 115, 0, 23)
+SliderValue.Font = Enum.Font.Gotham
+SliderValue.Text = StartValue
+SliderValue.TextColor3 = Color3.fromRGB(255, 255, 255)
+SliderValue.TextSize = 18.000
+SliderValue.TextXAlignment = Enum.TextXAlignment.Right
+
+Slider.Name = "Slider"
+Slider.Parent = SliderContainer
+Slider.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+Slider.BorderSizePixel = 0
+Slider.Position = UDim2.new(0.0160000008, 0, 0.621999979, 0)
+Slider.Size = UDim2.new(0, 304, 0, 7)
+Slider.AutoButtonColor = false
+Slider.Font = Enum.Font.SourceSans
+Slider.Text = ""
+Slider.TextColor3 = Color3.fromRGB(0, 0, 0)
+Slider.TextSize = 14.000
+
+SliderIn.Name = "SliderIn"
+SliderIn.Parent = Slider
+SliderIn.BackgroundColor3 = Color3.fromRGB(102, 68, 132)
+SliderIn.Position = UDim2.new(-0.00373679702, 0, -0.00200108113, 0)
+SliderIn.Size = UDim2.new(0, 1, 0, 6)
+
+UICorner_9.CornerRadius = UDim.new(0, 6)
+UICorner_9.Parent = SliderIn
+
+UICorner_10.CornerRadius = UDim.new(0, 6)
+UICorner_10.Parent = Slider
+ 
+Slider.MouseButton1Down:Connect(function()
+    Val = math.floor((((tonumber(MaxVal) - tonumber(MinVal)) / 318) * SliderIn.AbsoluteSize.X) + tonumber(MinVal)) or 0
+    pcall(function()
+        callback(Val)
+    end)
+    SliderIn.Size = UDim2.new(0, math.clamp(zzMouse.X - Slider.AbsolutePosition.X, 0, 318), 0, 16)
+    MCon = zzMouse.Move:Connect(function()
+        SliderValue.Text = Val
+        Val = math.floor((((tonumber(MaxVal) - tonumber(MinVal)) / 318) * SliderIn.AbsoluteSize.X) + tonumber(MinVal))
+        pcall(function()
+            callback(Val)
+        end)
+        Slider.Size = UDim2.new(0, math.clamp(zzMouse.X - SliderIn.AbsolutePosition.X, 0, 318), 0, 16)
+    end)
+    RCon = zzUIS.InputEnded:Connect(function(Mouse)
+        if Mouse.UserInputType == Enum.UserInputType.MouseButton1 then
+            Val = math.floor((((tonumber(MaxVal) - tonumber(MinVal)) / 318) * SliderIn.AbsoluteSize.X) + tonumber(MinVal))
+            pcall(function()
+                callback(Val)
+            end)
+            SliderIn.Size = UDim2.new(0, math.clamp(zzMouse.X - SliderIn.AbsolutePosition.X, 0, 318), 0, 16)
+            MCon:Disconnect()
+            RCon:Disconnect()
+        end
+end)
 
         return MainLibrary
         
