@@ -1,6 +1,46 @@
 -- Hello fat skiddo this is a shitty example so fuck off
 
 ---misc---
+function Ripple(Button) --- Thanks xbox#0109
+    Button.AutoButtonColor = false
+    Button.ClipsDescendants = true
+
+    Button:SetAttribute("OriginalColor", Button.BackgroundColor3)
+    Button.Activated:Connect(function()
+    if Button:FindFirstChild("Circle") then
+        return
+    end
+
+        spawn(function()
+            local NewCircle = Circle:Clone()
+
+            NewCircle.Parent = Button
+
+            NewCircle.Position = UDim2.new(0, Mouse.X - NewCircle.AbsolutePosition.X, 0, Mouse.Y - NewCircle.AbsolutePosition.Y)
+
+            local Size = 0
+
+            if Button.AbsoluteSize.X > Button.AbsoluteSize.Y then
+                Size = Button.AbsoluteSize.X * 1.5
+            elseif Button.AbsoluteSize.X < Button.AbsoluteSize.Y then
+                Size = Button.AbsoluteSize.Y * 1.5
+            elseif Button.AbsoluteSize.X == Button.AbsoluteSize.Y then
+                Size = Button.AbsoluteSize.X * 1.5
+            end
+
+            NewCircle:TweenSizeAndPosition(UDim2.new(0, Size, 0, Size), UDim2.new(0.5, -Size / 2, 0.5, -Size / 2), "Out", "Quad", 0.5)
+
+            for Index = 1, 10 do
+                NewCircle.ImageTransparency = NewCircle.ImageTransparency + 0.01
+
+                wait(0.5 / 10)
+            end
+
+            NewCircle:Destroy()
+        end)
+    end)
+end
+
 function Drag(obj)
 
     local UserInputService = game:GetService("UserInputService")
@@ -105,7 +145,7 @@ function RealZzLib:CreateMain(GameName)
     hubname.BorderSizePixel = 0
     hubname.Position = UDim2.new(0.0746320337, 0, 0, 0)
     hubname.Size = UDim2.new(0, 154, 0, 45)
-    hubname.Font = Enum.Font.SourceSansSemibold
+    hubname.Font = Enum.Font.Gotham
     hubname.Text = "RealZzHub"
     hubname.TextColor3 = Color3.fromRGB(255, 255, 255)
     hubname.TextSize = 41.000
@@ -124,10 +164,10 @@ function RealZzLib:CreateMain(GameName)
     TabContainer.Size = UDim2.new(0, 198, 0, 289)
     TabContainer.ScrollBarThickness = 5
     TabContainer.ChildAdded:Connect(function(child) Scale(TabContainer) end)
-    TabContainer.ChildRemoved:Connect(function(child)
+    TabContainer.Frame.Drop.ChildRemoved:Connect(function(child)
         Scale(TabContainer, 3)
     end)
-    TabContainer:GetPropertyChangedSignal("Size"):Connect(function()
+    TabContainer.Frame:GetPropertyChangedSignal("Size"):Connect(function()
         Scale(TabContainer, 3)
     end)
 
@@ -158,7 +198,7 @@ function RealZzLib:CreateMain(GameName)
     gamename.BorderSizePixel = 0
     gamename.Position = UDim2.new(0.419301122, 0, 0, 0)
     gamename.Size = UDim2.new(0, 339, 0, 45)
-    gamename.Font = Enum.Font.SourceSans
+    gamename.Font = Enum.Font.Gotham
     gamename.Text = GameName
     gamename.TextColor3 = Color3.fromRGB(255, 255, 255)
     gamename.TextSize = 27.000
@@ -179,7 +219,7 @@ function RealZzLib:CreateMain(GameName)
         Tab.BackgroundColor3 = Color3.fromRGB(47, 47, 47)
         Tab.Position = UDim2.new(0.06313131, 0, 0.0207612459, 0)
         Tab.Size = UDim2.new(0, 173, 0, 34)
-        Tab.Font = Enum.Font.SourceSans
+        Tab.Font = Enum.Font.Gotham
         Tab.Text = TabName
         Tab.TextColor3 = Color3.fromRGB(255, 255, 255)
         Tab.TextSize = 35.000
@@ -191,6 +231,7 @@ function RealZzLib:CreateMain(GameName)
         end)
 
         UICorner_2.Parent = Tab
+        Ripple(Tab)
 
         Tab1.Name = TabName
         Tab1.Parent = Containers
@@ -203,14 +244,81 @@ function RealZzLib:CreateMain(GameName)
         Tab1.ScrollBarThickness = 5
         Tab1.VerticalScrollBarPosition = Enum.VerticalScrollBarPosition.Left
         Tab1.ChildAdded:Connect(function(child) Scale(Tab1) end)
-        Tab1.ChildRemoved:Connect(function(child)
+        TabContainer.Frame.Drop.ChildRemoved:Connect(function(child)
             Scale(Tab1, 3)
         end)
-        Tab1:GetPropertyChangedSignal("Size"):Connect(function()
+        TabContainer.Frame:GetPropertyChangedSignal("Size"):Connect(function()
             Scale(Tab1, 3)
         end)
 
+        local MainLibrary = {}
+
+        function MainLibrary:NewToggle(ToggleName, callback, State)
+            local CurrentState = State
+
+            local ToggleContainer = Instance.new("Frame")
+            local UICorner_4 = Instance.new("UICorner")
+            local ToggleName = Instance.new("TextLabel")
+            local ToggleButton = Instance.new("TextButton")
+            local UICorner_5 = Instance.new("UICorner")
+
+            ToggleContainer.Name = "ToggleContainer"
+            ToggleContainer.Parent = Tab1
+            ToggleContainer.BackgroundColor3 = Color3.fromRGB(47, 47, 47)
+            ToggleContainer.Position = UDim2.new(0.352071017, 0, 0.226666659, 0)
+            ToggleContainer.Size = UDim2.new(0, 315, 0, 27)
+            
+            UICorner_4.CornerRadius = UDim.new(0, 6)
+            UICorner_4.Parent = ToggleContainer
+            
+            ToggleName.Name = "ToggleName"
+            ToggleName.Parent = ToggleContainer
+            ToggleName.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+            ToggleName.BackgroundTransparency = 1.000
+            ToggleName.Position = UDim2.new(0.0190476198, 0, 0, 0)
+            ToggleName.Size = UDim2.new(0, 224, 0, 27)
+            ToggleName.Font = Enum.Font.Gotham
+            ToggleName.TextColor3 = Color3.fromRGB(255, 255, 255)
+            ToggleName.TextSize = 18.000
+            ToggleName.TextXAlignment = Enum.TextXAlignment.Left
+            ToggleName.Text = ToggleName
+            
+            ToggleButton.Name = "ToggleButton"
+            ToggleButton.Parent = ToggleContainer
+            if not CurrentState then
+            ToggleButton.BackgroundColor3 = Color3.fromRGB(102, 68, 132)
+            else
+            ToggleButton.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
+            end
+            ToggleButton.Position = UDim2.new(0.913650811, 0, 0.111111112, 0)
+            ToggleButton.Size = UDim2.new(0, 21, 0, 21)
+            ToggleButton.Font = Enum.Font.SourceSans
+            ToggleButton.Text = ""
+            ToggleButton.TextColor3 = Color3.fromRGB(0, 0, 0)
+            ToggleButton.TextSize = 14.000
+            ToggleButton.MouseButton1Click:Connect(function()
+                CurrentState = not CurrentState
+                callback(CurrentState)
+
+                if not CurrentState then
+                    ToggleButton.BackgroundColor3 = Color3.fromRGB(102, 68, 132)
+                else
+                    ToggleButton.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
+                end
+            end)
+            
+            UICorner_5.CornerRadius = UDim.new(0, 6)
+            UICorner_5.Parent = ToggleButton
+
+
+            
+        end    
+
+        return MainLibrary
+
     end
+
+    
     return TabLibrary
 end
 return RealZzLib
