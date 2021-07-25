@@ -209,7 +209,7 @@ function RealZzLib:CreateMain(GameName)
         TabContainer.Frame:GetPropertyChangedSignal("Size"):Connect(function()
             Scale(Tab1, 3)
         end)
-
+--[[
         local MainLibrary = {}
 
         function MainLibrary:NewToggle(ToggleName, callback, State)
@@ -274,7 +274,8 @@ function RealZzLib:CreateMain(GameName)
         end    
 
         return MainLibrary
-
+        
+        --]]
     end
 
     
