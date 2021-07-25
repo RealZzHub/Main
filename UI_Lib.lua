@@ -476,6 +476,8 @@ Slider.MouseButton1Down:Connect(function()
         end
 end)
 
+end
+
         return MainLibrary
         
         
