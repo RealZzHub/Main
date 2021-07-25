@@ -259,7 +259,7 @@ function RealZzLib:CreateMain(GameName)
 
         function MainLibrary:NewToggle(ToggleName, callback, State)
             local CurrentState = State or false
-                print(CurrentState) --debugging
+                print(ToggleName) --debugging
 
 
             local ToggleContainer = Instance.new("Frame")
@@ -285,7 +285,7 @@ function RealZzLib:CreateMain(GameName)
             ToggleName.TextSize = 18.000
             ToggleName.TextXAlignment = Enum.TextXAlignment.Left
             ToggleName.Text = ToggleName or "undefined"
-    print(ToggleName.Text) --debugging
+    
             
             ToggleButton.Name = "ToggleButton"
             ToggleButton.Parent = ToggleContainer
@@ -303,7 +303,6 @@ function RealZzLib:CreateMain(GameName)
             ToggleButton.MouseButton1Click:Connect(function()
                 CurrentState = not CurrentState
                     callback(CurrentState)
-print(CurrentState) --debugging
 
                 if not CurrentState then
                     ToggleButton.BackgroundColor3 = Color3.fromRGB(102, 68, 132)
