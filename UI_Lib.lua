@@ -1,46 +1,6 @@
 -- Hello fat skiddo this is a shitty example so fuck off
 
 ---misc---
-function Ripple(Button) --- Thanks xbox#0109
-    Button.AutoButtonColor = false
-    Button.ClipsDescendants = true
-
-    Button:SetAttribute("OriginalColor", Button.BackgroundColor3)
-    Button.Activated:Connect(function()
-    if Button:FindFirstChild("Circle") then
-        return
-    end
-
-        spawn(function()
-            local NewCircle = Circle:Clone()
-
-            NewCircle.Parent = Button
-
-            NewCircle.Position = UDim2.new(0, Mouse.X - NewCircle.AbsolutePosition.X, 0, Mouse.Y - NewCircle.AbsolutePosition.Y)
-
-            local Size = 0
-
-            if Button.AbsoluteSize.X > Button.AbsoluteSize.Y then
-                Size = Button.AbsoluteSize.X * 1.5
-            elseif Button.AbsoluteSize.X < Button.AbsoluteSize.Y then
-                Size = Button.AbsoluteSize.Y * 1.5
-            elseif Button.AbsoluteSize.X == Button.AbsoluteSize.Y then
-                Size = Button.AbsoluteSize.X * 1.5
-            end
-
-            NewCircle:TweenSizeAndPosition(UDim2.new(0, Size, 0, Size), UDim2.new(0.5, -Size / 2, 0.5, -Size / 2), "Out", "Quad", 0.5)
-
-            for Index = 1, 10 do
-                NewCircle.ImageTransparency = NewCircle.ImageTransparency + 0.01
-
-                wait(0.5 / 10)
-            end
-
-            NewCircle:Destroy()
-        end)
-    end)
-end
-
 function Drag(obj)
 
     local UserInputService = game:GetService("UserInputService")
@@ -231,7 +191,6 @@ function RealZzLib:CreateMain(GameName)
         end)
 
         UICorner_2.Parent = Tab
-        Ripple(Tab)
 
         Tab1.Name = TabName
         Tab1.Parent = Containers
