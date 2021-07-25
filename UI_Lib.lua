@@ -320,6 +320,38 @@ function RealZzLib:CreateMain(GameName)
             
         end    
 
+        function MainLibrary:NewButton(ButtonName, callback)
+            local BName = ButtonName
+            local ButtonContainer = Instance.new("Frame")
+            local UICorner_6 = Instance.new("UICorner")
+            local ButtonButton = Instance.new("TextButton")
+            local UICorner_7 = Instance.new("UICorner")
+            
+            ButtonContainer.Name = "ButtonContainer"
+            ButtonContainer.Parent = Tab1
+            ButtonContainer.BackgroundColor3 = Color3.fromRGB(47, 47, 47)
+            ButtonContainer.Size = UDim2.new(0, 315, 0, 27)
+
+            UICorner_6.CornerRadius = UDim.new(0, 6)
+            UICorner_6.Parent = ButtonContainer
+
+            ButtonButton.Name = "ButtonButton"
+            ButtonButton.Parent = ButtonContainer
+            ButtonButton.BackgroundColor3 = Color3.fromRGB(102, 68, 132)
+            ButtonButton.Position = UDim2.new(0.0158730168, 0, 0.0740740746, 0)
+            ButtonButton.Size = UDim2.new(0, 304, 0, 23)
+            ButtonButton.Font = Enum.Font.Gotham
+            ButtonButton.Text = tostring(BName)
+            ButtonButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+            ButtonButton.TextSize = 18.000
+            ButtonButton.MouseButton1Click:Connect(function()    
+            callback()
+            end)
+
+            UICorner_7.CornerRadius = UDim.new(0, 6)
+            UICorner_7.Parent = ButtonButton
+        end
+
         return MainLibrary
         
         
