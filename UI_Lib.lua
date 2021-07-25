@@ -284,7 +284,7 @@ function RealZzLib:CreateMain(GameName)
             ToggleName.TextColor3 = Color3.fromRGB(255, 255, 255)
             ToggleName.TextSize = 18.000
             ToggleName.TextXAlignment = Enum.TextXAlignment.Left
-            ToggleName.Text = TName
+            ToggleName.Text = tostring(TName)
     
             
             ToggleButton.Name = "ToggleButton"
