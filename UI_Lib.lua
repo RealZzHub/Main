@@ -259,7 +259,7 @@ function RealZzLib:CreateMain(GameName)
 
         function MainLibrary:NewToggle(ToggleName, callback, State)
             local CurrentState = State or false
-                print(ToggleName) --debugging
+              local TName = ToggleName
 
 
             local ToggleContainer = Instance.new("Frame")
@@ -284,7 +284,7 @@ function RealZzLib:CreateMain(GameName)
             ToggleName.TextColor3 = Color3.fromRGB(255, 255, 255)
             ToggleName.TextSize = 18.000
             ToggleName.TextXAlignment = Enum.TextXAlignment.Left
-            ToggleName.Text = ToggleName or "undefined"
+            ToggleName.Text = TName
     
             
             ToggleButton.Name = "ToggleButton"
