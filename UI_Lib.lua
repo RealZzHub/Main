@@ -86,7 +86,7 @@ function Scale(object)
     local Y = 0
     for i, v in pairs(object:GetChildren()) do
         if not v:IsA("UIListLayout") then
-            Y = Y + v.AbsoluteSize.Y + Offs
+            Y = Y + v.AbsoluteSize.Y + Offs + 3
         end
     end
     object.CanvasSize = UDim2.new(0, 0, 0, Y - Offs)
@@ -243,12 +243,12 @@ function RealZzLib:CreateMain(GameName)
         Tab1.ScrollBarThickness = 5
         Tab1.VerticalScrollBarPosition = Enum.VerticalScrollBarPosition.Left
         Tab1.ChildAdded:Connect(function(child) Scale(Tab1) end)
-       -- TabContainer.ChildRemoved:Connect(function(child)
-       --     Scale(Tab1)
-      --  end)
-     --  TabContainer:GetPropertyChangedSignal("Size"):Connect(function()
-     --      Scale(Tab1)
-      -- end)
+       TabContainer.ChildRemoved:Connect(function(child)
+           Scale(Tab1)
+       end)
+      TabContainer:GetPropertyChangedSignal("Size"):Connect(function()
+           Scale(Tab1)
+       end)
 
         UIListLayout.Parent = TabContainer
         UIListLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
