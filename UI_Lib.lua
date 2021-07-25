@@ -213,6 +213,7 @@ function RealZzLib:CreateMain(GameName)
         local Tab1 = Instance.new("ScrollingFrame")
         local UICorner_2 = Instance.new("UICorner")
         local UIListLayout = Instance.new("UIListLayout")
+        local UIListLayout_2 = Instance.new("UIListLayout")
 
         Tab.Name = TabName
         Tab.Parent = TabContainer
@@ -243,17 +244,22 @@ function RealZzLib:CreateMain(GameName)
         Tab1.ScrollBarThickness = 5
         Tab1.VerticalScrollBarPosition = Enum.VerticalScrollBarPosition.Left
         Tab1.ChildAdded:Connect(function(child) Scale(Tab1) end)
-       TabContainer.ChildRemoved:Connect(function(child)
+        TabContainer.ChildRemoved:Connect(function(child)
            Scale(Tab1)
-       end)
-      TabContainer:GetPropertyChangedSignal("Size"):Connect(function()
+        end)
+        TabContainer:GetPropertyChangedSignal("Size"):Connect(function()
            Scale(Tab1)
-       end)
+        end)
 
         UIListLayout.Parent = TabContainer
         UIListLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
         UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
         UIListLayout.Padding = UDim.new(0.0199999996, 0)
+
+        UIListLayout_2.Parent = Tab1
+        UIListLayout_2.HorizontalAlignment = Enum.HorizontalAlignment.Center
+        UIListLayout_2.SortOrder = Enum.SortOrder.LayoutOrder
+        UIListLayout_2.Padding = UDim.new(0.00800000038, 0)
 
         local MainLibrary = {}
 
