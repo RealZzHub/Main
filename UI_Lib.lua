@@ -212,6 +212,7 @@ function RealZzLib:CreateMain(GameName)
         local Tab = Instance.new("TextButton")
         local Tab1 = Instance.new("ScrollingFrame")
         local UICorner_2 = Instance.new("UICorner")
+        local UIListLayout = Instance.new("UIListLayout")
 
         Tab.Name = TabName
         Tab.Parent = TabContainer
@@ -245,9 +246,14 @@ function RealZzLib:CreateMain(GameName)
         TabContainer.ChildRemoved:Connect(function(child)
             Scale(Tab1)
         end)
-       -- TabContainer:GetPropertyChangedSignal("Size"):Connect(function()
-       --     Scale(Tab1)
-       -- end)
+       TabContainer:GetPropertyChangedSignal("Size"):Connect(function()
+           Scale(Tab1)
+       end)
+
+        UIListLayout.Parent = TabContainer
+        UIListLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
+        UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
+        UIListLayout.Padding = UDim.new(0.0199999996, 0)
 
         local MainLibrary = {}
 
