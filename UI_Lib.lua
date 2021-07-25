@@ -145,7 +145,7 @@ function RealZzLib:CreateMain(GameName)
     hubname.BorderSizePixel = 0
     hubname.Position = UDim2.new(0.0746320337, 0, 0, 0)
     hubname.Size = UDim2.new(0, 154, 0, 45)
-    hubname.Font = Enum.Font.Gotham
+    hubname.Font = Enum.Font.SourceSansSemibold
     hubname.Text = "RealZzHub"
     hubname.TextColor3 = Color3.fromRGB(255, 255, 255)
     hubname.TextSize = 41.000
