@@ -259,7 +259,7 @@ function RealZzLib:CreateMain(GameName)
 
         function MainLibrary:NewToggle(ToggleName, callback, State)
             local CurrentState = State or false
-                
+                print(CurrentState) --debugging
 
 
             local ToggleContainer = Instance.new("Frame")
@@ -273,9 +273,6 @@ function RealZzLib:CreateMain(GameName)
             ToggleContainer.BackgroundColor3 = Color3.fromRGB(47, 47, 47)
          --   ToggleContainer.Position = UDim2.new(0.352071017, 0, 0.226666659, 0)
             ToggleContainer.Size = UDim2.new(0, 315, 0, 27)
-            
-            UICorner_4.CornerRadius = UDim.new(0, 6)
-            UICorner_4.Parent = ToggleContainer
             
             ToggleName.Name = "ToggleName"
             ToggleName.Parent = ToggleContainer
@@ -316,7 +313,9 @@ print(CurrentState) --debugging
             end)
             
             UICorner_5.CornerRadius = UDim.new(0, 6)
-            UICorner_5.Parent = ToggleButton
+            UICorner_5.Parent = ToggleButton                         
+            UICorner_4.CornerRadius = UDim.new(0, 6)
+            UICorner_4.Parent = ToggleContainer
 
 
             
