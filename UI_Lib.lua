@@ -213,7 +213,7 @@ function RealZzLib:CreateMain(GameName)
         local MainLibrary = {}
 
         function MainLibrary:NewToggle(ToggleName, callback, State)
-            local CurrentState = State
+            local CurrentState = State or false
 
             local ToggleContainer = Instance.new("Frame")
             local UICorner_4 = Instance.new("UICorner")
