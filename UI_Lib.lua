@@ -125,8 +125,15 @@ function RealZzLib:CreateMain(GameName)
 	local TabContainer = Instance.new("ScrollingFrame")
 	local Containers = Instance.new("Frame")
 	local UIListLayout = Instance.new("UIListLayout")
-
-	Main.Parent = zzLPlayer.PlayerGui
+	
+	if syn then
+	syn.protect_gui(Main)
+	Main.Parent = game.CoreGui
+	elseif hiddenUI or gethui then
+	Main.Parent = hiddenUI() or gethui()
+	else
+	Main.Parent = game.CoreGui
+	end
 
 	Main.Name = GameName
 	Main.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
