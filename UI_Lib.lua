@@ -613,7 +613,7 @@ function RealZzLib:CreateMain(GameName)
 
 			KeybindButton.Name = "KeybindButton"
 			KeybindButton.Parent = KeybindContainer
-			KeybindButton.BackgroundColor3 = Color3.fromRGB(102, 68, 132)
+			KeybindButton.BackgroundColor3 = Color3.fromRGB(166, 79, 219)
 			KeybindButton.Position = UDim2.new(0.612698436, 0, 0.0740740746, 0)
 			KeybindButton.Size = UDim2.new(0, 116, 0, 23)
 			KeybindButton.Font = Enum.Font.Gotham
