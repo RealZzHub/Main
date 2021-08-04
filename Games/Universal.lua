@@ -125,7 +125,6 @@ zzUIS.InputEnded:Connect(function(v)
 end)
 
 zzUIS.InputBegan:Connect(function(v)
-    print(tostring(v.KeyCode))
     if v.KeyCode == Settings.Aimbot.AimbotKey then
         Aiming = true
     end
