@@ -4,14 +4,18 @@ local Settings = {
         Esp = false,
         Distance = false,
         Name = false,
-        TeamCheck = false
-    },
+        TeamCheck = false,
+        Tracer = false,
+        FromTracer = "Center"
+       },
     Aimbot = {
         AimbotKey = Enum.KeyCode.F,
         AimbotUsed = false,
         FOVRadius = 150,
-        Smoothness = 1,
+        SmoothnessX = 1,
+        SmoothnessY = 1,
         TeamCheck = false,
+        VisibleCheck = false,
         FOVUsed = false,
         AimbotPart = "Head",
         FOVColor = Color3.fromRGB(255,255,255)
@@ -51,9 +55,15 @@ end)
 MainTab:NewToggle("Team Check", function(state)
     Settings.Aimbot.TeamCheck = state
 end)
-MainTab:NewSlider("Smoothness", 1, 20, function(v)
-    Settings.Aimbot.Smoothness = v
+MainTab:NewToggle("Visible Check", function(state)
+    Settings.Aimbot.VisibleCheck = state
 end)
+MainTab:NewSlider("Smoothness X", 10, 200, function(v)
+    Settings.Aimbot.SmoothnessX = v / 10
+end,10)
+MainTab:NewSlider("Smoothness Y", 10, 200, function(v)
+    Settings.Aimbot.SmoothnessY = v / 10
+end,10)
 MainTab:NewDropdown("Aim Part", {"Head"}, function(v)
     Settings.Aimbot.AimbotPart = v
 end)
@@ -66,6 +76,7 @@ MainTab:NewSlider("FOV Radius", 1,1000, function(v)
     FOV.Radius = v
 end, Settings.Aimbot.FOVRadius)
 
+MainTab:NewLabel("https://realzzhub.xyz")
 VisualsTab = Main:NewTab("Visuals")
 
 VisualsTab:NewToggle("Box ESP", function(state)
@@ -77,12 +88,17 @@ end)
 VisualsTab:NewToggle("Distance ESP", function(state)
     Settings.Visuals.Distance = state
 end)
+VisualsTab:NewToggle("Tracer ESP", function(state)
+    Settings.Visuals.Tracer = state
+end)
+VisualsTab:NewDropdown("Tracer Origin", {"Top", "Center", "Bottom", "Mouse"}, function(v)
+    Settings.Visuals.FromTracer = v
+end)
 VisualsTab:NewToggle("Team Check", function(state)
     Settings.Visuals.TeamCheck = state
 end)
 
 -- Aimbot --
-
 function getTarget()
     local Mag = math.huge
     local plr
@@ -92,9 +108,11 @@ function getTarget()
                 local Pos, onScreen = zzCamera:WorldToScreenPoint(v.Character[Settings.Aimbot.AimbotPart].Position) 
                 if onScreen then
                     local Dist = (Vector2.new(zzMouse.X, zzMouse.Y) - Vector2.new(Pos.X, Pos.Y)).Magnitude 
-                    if not Settings.Aimbot.FOVUsed and Dist < Mag or Settings.Aimbot.FOVUsed and Dist < Mag and Dist < Settings.Aimbot.FOVRadius then 
+                    if not Settings.Aimbot.FOVUsed and Dist < Mag or Settings.Aimbot.FOVUsed and Dist < Mag and Dist < Settings.Aimbot.FOVRadius then
+                        if Settings.Aimbot.VisibleCheck and #zzCamera:GetPartsObscuringTarget(v.Character[Settings.Aimbot.AimbotPart].Position, {v.Character, zzLPlayer.Character, zzCamera}) == 0 or not Settings.Aimbot.VisibleCheck then 
                         Mag = Dist
                         plr = v
+                        end
                     end
                 end
             end
@@ -113,7 +131,7 @@ zzRunService.RenderStepped:Connect(function()
         local plr = getTarget()
         if plr then
             local Pos = zzCamera:WorldToViewportPoint(plr.Character[Settings.Aimbot.AimbotPart].Position)
-            mousemoverel((Pos.X - MousePos.X) / Settings.Aimbot.Smoothness, (Pos.Y - MousePos.Y) / Settings.Aimbot.Smoothness)
+            mousemoverel((Pos.X - MousePos.X) / Settings.Aimbot.SmoothnessX, (Pos.Y - MousePos.Y) / Settings.Aimbot.SmoothnessY)
         end
     end
 end)
@@ -134,10 +152,17 @@ end)
 -- ESP --
 function StartESP(plr) 
 
+    local BoxOutline = Drawing.new("Square")
+    BoxOutline.Visible = false
+    BoxOutline.Color = Color3.new(0,0,0)
+    BoxOutline.Thickness = 4
+    BoxOutline.Transparency = 1
+    BoxOutline.Filled = false
+
     local Box = Drawing.new("Square")
     Box.Visible = false
     Box.Color = Color3.new(1,1,1)
-    Box.Thickness = 2
+    Box.Thickness = 1.5
     Box.Transparency = 1
     Box.Filled = false
 
@@ -154,7 +179,12 @@ function StartESP(plr)
     Dist.Color = Color3.new(1,1,1)
     Dist.Center = true
     Dist.Outline = true
- 
+
+    local Tracer = Drawing.new("Line")
+    Tracer.Visible = false
+    Tracer.Color = Color3.new(1,1,1)
+    Tracer.Thickness = 2
+    Tracer.Transparency = 1
 
     local Run
     Run = zzRunService.RenderStepped:Connect(function()
@@ -169,7 +199,7 @@ function StartESP(plr)
             
            if onScreen then
 
-            Box.Size = Vector2.new(1000 / RootPos.Z, HeadPos.Y - LegPos.Y)
+            Box.Size = Vector2.new(2400 / RootPos.Z, HeadPos.Y - LegPos.Y)
             Box.Position = Vector2.new(RootPos.X - Box.Size.X / 2, RootPos.Y - Box.Size.Y / 2)
 
             Name.Position = Vector2.new(RootPos.X, (RootPos.Y + Box.Size.Y / 2) - 25)
@@ -178,18 +208,44 @@ function StartESP(plr)
             Dist.Position = Vector2.new(RootPos.X, (RootPos.Y - Box.Size.Y / 2) + 25)
             Dist.Text = "["..tostring(math.floor((plr.Character.HumanoidRootPart.Position - zzCamera.CFrame.Position).Magnitude)).." Studs]"
 
+            BoxOutline.Size = Vector2.new(2400 / RootPos.Z, HeadPos.Y - LegPos.Y)
+            BoxOutline.Position = Vector2.new(RootPos.X - Box.Size.X / 2, RootPos.Y - Box.Size.Y / 2)
+
+            if Settings.Visuals.FromTracer == "Center" then
+            Tracer.From = Vector2.new(zzCamera.ViewportSize.X / 2, zzCamera.ViewportSize.Y / 2)
+            elseif Settings.Visuals.FromTracer == "Top" then
+                Tracer.From = Vector2.new(zzCamera.ViewportSize.X / 2, 0)
+            elseif Settings.Visuals.FromTracer == "Bottom" then
+                Tracer.From = Vector2.new(zzCamera.ViewportSize.X / 2, zzCamera.ViewportSize.Y)
+            elseif Settings.Visuals.FromTracer == "Mouse" then
+                Tracer.From = zzUIS:GetMouseLocation()
+            end
+            Tracer.To = Vector2.new(RootPos.X, RootPos.Y - BoxOutline.Size.Y / 2)
+            
+
             Dist.Color = plr.TeamColor.Color
             Name.Color = plr.TeamColor.Color
             Box.Color = plr.TeamColor.Color
+            Tracer.Color = plr.TeamColor.Color
+            if Settings.Aimbot.AimbotUsed and plr == getTarget() then
+                Dist.Color = Color3.new(1,1,1)
+                Name.Color = Color3.new(1,1,1)
+                Box.Color = Color3.new(1,1,1)
+                Tracer.Color = Color3.new(1,1,1)
+            end
 
             if Settings.Visuals.TeamCheck and plr.Team == zzLPlayer.Team then
                 Box.Visible = false
                 Name.Visible = false
                 Dist.Visible = false
+                BoxOutline.Visible = false
+                Tracer.Visible = false
             else
                 Dist.Visible = Settings.Visuals.Distance
                 Name.Visible = Settings.Visuals.Name
                 Box.Visible = Settings.Visuals.Esp
+                BoxOutline.Visible = Settings.Visuals.Esp
+                Tracer.Visible = Settings.Visuals.Tracer
             end
 
 
@@ -197,14 +253,16 @@ function StartESP(plr)
             Box.Visible = false
             Name.Visible = false
             Dist.Visible = false
-
+            BoxOutline.Visible = false
+            Tracer.Visible = false
            end
 
         else
             Box.Visible = false
             Name.Visible = false
             Dist.Visible = false
-
+            BoxOutline.Visible = false
+            Tracer.Visible = false
         end
     end)
 
@@ -216,6 +274,8 @@ function StartESP(plr)
             Box:Remove()
             Name:Remove()
             Dist:Remove()
+            BoxOutline:Remove()
+            Tracer:Remove()
         end
     end)
 end
