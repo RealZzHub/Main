@@ -109,7 +109,7 @@ function getTarget()
                 if onScreen then
                     local Dist = (Vector2.new(zzMouse.X, zzMouse.Y) - Vector2.new(Pos.X, Pos.Y)).Magnitude 
                     if not Settings.Aimbot.FOVUsed and Dist < Mag or Settings.Aimbot.FOVUsed and Dist < Mag and Dist < Settings.Aimbot.FOVRadius then
-                        if Settings.Aimbot.VisibleCheck and #zzCamera:GetPartsObscuringTarget(v.Character[Settings.Aimbot.AimbotPart].Position, {v.Character, zzLPlayer.Character, zzCamera}) == 0 or not Settings.Aimbot.VisibleCheck then 
+                        if not Settings.Aimbot.VisibleCheck or (Settings.Aimbot.VisibleCheck and #zzCamera:GetPartsObscuringTarget(v.Character[Settings.Aimbot.AimbotPart].Position, {v.Character, zzLPlayer.Character, zzCamera}) < 1)then 
                         Mag = Dist
                         plr = v
                         end
