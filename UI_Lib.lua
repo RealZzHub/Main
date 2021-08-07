@@ -129,8 +129,8 @@ function RealZzLib:CreateMain(GameName)
 	if syn then
 	syn.protect_gui(Main)
 	Main.Parent = game.CoreGui
-	elseif hiddenUI or gethui then
-	Main.Parent = hiddenUI() or gethui()
+	elseif gethui then
+	Main.Parent = gethui()
 	else
 	Main.Parent = game.CoreGui
 	end
