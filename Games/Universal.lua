@@ -99,6 +99,10 @@ VisualsTab:NewToggle("Team Check", function(state)
 end)
 
 -- Aimbot --
+function IsVisible(Pos, List)
+    return #zzCamera:GetPartsObscuringTarget({zzLPlayer.Character.Head.Position, Pos}, List) == 0 and true or false
+end
+
 function getTarget()
     local Mag = math.huge
     local plr
@@ -109,7 +113,7 @@ function getTarget()
                 if onScreen then
                     local Dist = (Vector2.new(zzMouse.X, zzMouse.Y) - Vector2.new(Pos.X, Pos.Y)).Magnitude 
                     if not Settings.Aimbot.FOVUsed and Dist < Mag or Settings.Aimbot.FOVUsed and Dist < Mag and Dist < Settings.Aimbot.FOVRadius then
-                        if not Settings.Aimbot.VisibleCheck or (Settings.Aimbot.VisibleCheck and #zzCamera:GetPartsObscuringTarget(v.Character[Settings.Aimbot.AimbotPart].Position, {v.Character, zzLPlayer.Character, zzCamera}) < 1)then 
+                        if not Settings.Aimbot.VisibleCheck and true or Settings.Aimbot.VisibleCheck and IsVisible(v.Character[Settings.Aimbot.AimbotPart].Position, {v.Character, zzLPlayer.Character, zzCamera}) then 
                         Mag = Dist
                         plr = v
                         end
