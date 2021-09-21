@@ -245,8 +245,8 @@ function RealZzLib:CreateMain(GameName, xyz)
 				wait(0.8)
 				mainbackground:TweenSize(UDim2.new(0, 47, 0, 47),
 					Enum.EasingDirection.In,
-					Enum.EasingStyle.Sine, 1)
-				wait(1)
+					Enum.EasingStyle.Sine, 0.65)
+				wait(0.65)
 				local Tween = zzTweenService:Create(mainbackground,
 					TweenInfo.new(0.2,
 						Enum.EasingStyle
@@ -275,8 +275,8 @@ function RealZzLib:CreateMain(GameName, xyz)
 				wait(0.55)
 				mainbackground:TweenSize(UDim2.new(0, 601, 0, 352),
 					Enum.EasingDirection.In,
-					Enum.EasingStyle.Sine, 1)
-				wait(1.3)
+					Enum.EasingStyle.Sine, 0.65)
+				wait(0.95)
 				mainbackground.Rotation = 0
 				gamename.Visible = true
 				hubname.Visible = true
