@@ -112,8 +112,9 @@ end)
 
 local RealZzLib = {}
 
-function RealZzLib:CreateMain(GameName)
+function RealZzLib:CreateMain(GameName, xyz)
 	local TabF = false
+	local ABC = xyz or "RealZzHub"
 
 	local Main = Instance.new("ScreenGui")
 	local mainbackground = Instance.new("ImageLabel")
@@ -163,7 +164,7 @@ function RealZzLib:CreateMain(GameName)
 	hubname.Position = UDim2.new(0.101254329, 0, 0.0255681816, 0)
 	hubname.Size = UDim2.new(0, 154, 0, 45)
 	hubname.Font = Enum.Font.SourceSansSemibold
-	hubname.Text = "RealZzHub"
+	hubname.Text = ABC
 	hubname.TextColor3 = Color3.fromRGB(255, 255, 255)
 	hubname.TextSize = 41.000
 	hubname.TextWrapped = true
