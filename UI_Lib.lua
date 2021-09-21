@@ -242,7 +242,7 @@ function RealZzLib:CreateMain(GameName, xyz)
 				Bar.Visible = false
 				Containers.Visible = false
 				TabContainer.Visible = false
-				wait(0.8)
+				wait(0.55)
 				mainbackground:TweenSize(UDim2.new(0, 47, 0, 47),
 					Enum.EasingDirection.In,
 					Enum.EasingStyle.Sine, 0.65)
