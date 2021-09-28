@@ -7,3 +7,5 @@ game:GetService("StarterGui"):SetCore("SendNotification", {
         Title = "Notice",
         Text = "Kaiju Paradise Kick Script is disabled temporarily."
     })
+wait(2)
+s:Destroy()
