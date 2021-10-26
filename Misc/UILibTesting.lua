@@ -745,6 +745,7 @@ function RealZzLib:CreateMain(GameName, xyz)
 			local DToggled = Settings["Toggled"] or true
             local callback = callback or function() end
 			local CurItem = Settings["CurrentItem"] or ItemList[1]
+			local ShowSelected = Settings["ShowSelected"] or false
 
 			pcall(callback, CurItem, DToggled)
 
@@ -822,6 +823,9 @@ function RealZzLib:CreateMain(GameName, xyz)
 			DropdownName.TextSize = 18.000
 			DropdownName.TextXAlignment = Enum.TextXAlignment.Left
 			DropdownName.Text = tostring(DName)
+			if ShowSelected then
+				DropdownName.Text = tostring(DName).." - "..tostring(CurItem)
+			end
 
 			DropdownToggle.Name = "DropdownToggle"
 			DropdownToggle.Parent = DropdownContainer
@@ -861,9 +865,9 @@ function RealZzLib:CreateMain(GameName, xyz)
 			DToggleButton.Parent = DropdownContainer
 			DToggleButton.BackgroundColor3 = Color3.fromRGB(102, 68, 132)
 			if not DToggled then
-				ToggleButton.BackgroundColor3 = Color3.fromRGB(166, 79, 219)
+				DToggleButton.BackgroundColor3 = Color3.fromRGB(166, 79, 219)
 			else
-				ToggleButton.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
+				DToggleButton.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
 			end
 			DToggleButton.Position = UDim2.new(0.821587324, 0, 0.111111112, 0)
 			DToggleButton.Size = UDim2.new(0, 21, 0, 21)
@@ -871,15 +875,15 @@ function RealZzLib:CreateMain(GameName, xyz)
 			DToggleButton.Text = ""
 			DToggleButton.TextColor3 = Color3.fromRGB(0, 0, 0)
 			DToggleButton.TextSize = 14.000
-			DToggleButton.Visible = Settings["ToggleButton"]
-			ToggleButton.MouseButton1Click:Connect(function()
+			DToggleButton.Visible = Settings["ToggleButton"] or false
+			DToggleButton.MouseButton1Click:Connect(function()
 				DToggled = not DToggled
 				pcall(callback, CurItem, DToggled)
 
 				if not CurrentState then
-					ToggleButton.BackgroundColor3 = Color3.fromRGB(166, 79, 219)
+					DToggleButton.BackgroundColor3 = Color3.fromRGB(166, 79, 219)
 				else
-					ToggleButton.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
+					DToggleButton.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
 				end
 			end)
 
@@ -900,6 +904,9 @@ function RealZzLib:CreateMain(GameName, xyz)
 				DropdownButton.Text = tostring(Item)
 				DropdownButton.MouseButton1Click:Connect(function()
 					CurItem = DropdownButton.Text
+					if ShowSelected then
+						DropdownName.Text = tostring(DName).." - "..tostring(CurItem)
+					end
 					pcall(callback, CurItem, DToggled)
 					Dcloseopen()
 				end)
@@ -922,6 +929,7 @@ function RealZzLib:CreateMain(GameName, xyz)
 
             function Dropdown:Clear()
                 if DropdownItemContainer.Visible then
+					DropdownName.Text = tostring(DName)
                     Dcloseopen()
                 end
                 for i,v in pairs(DropdownItemContainer:GetChildren()) do
