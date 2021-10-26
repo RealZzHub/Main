@@ -567,14 +567,16 @@ function RealZzLib:CreateMain(GameName, xyz)
 				UIListLayout_2.AbsoluteContentSize.Y)
 
 			local function set(v)
-				if v < MinVal then
-                    v = MinVal
-                elseif v > MaxVal then
-                    v = MaxVal
+				if tonumber(v) then
+					if v < MinVal then
+                    	v = MinVal
+                	elseif v > MaxVal then
+                    	v = MaxVal
+					end
+					SliderValue.Text = v
+					Slider2:TweenSize(UDim2.new((v - MinVal) / (MaxVal - MinVal), 0, 0, 6), "Out", "Quad", 0.05, true)
+					pcall(callback, v)
 				end
-				SliderValue.Text = v
-				Slider2:TweenSize(UDim2.new((v - MinVal) / (MaxVal - MinVal), 0, 0, 6), "Out", "Quad", 0.05, true)
-				pcall(callback, v)
 			end
 			
 			set(Val)
@@ -585,7 +587,7 @@ function RealZzLib:CreateMain(GameName, xyz)
 			
 			SliderValue.FocusLost:Connect(function()
 				if #SliderValue.Text > 0 then
-					if tonumber(SliderValue.Text) ~= nil then
+					if tonumber(SliderValue.Text) then
 						set(tonumber(SliderValue.Text))
 					end
 				end
@@ -612,7 +614,7 @@ function RealZzLib:CreateMain(GameName, xyz)
             local SliderT = {}
 
             function SliderT:Set(NewVal)
-				if tonumber(NewVal) ~= nil then
+				if tonumber(NewVal) then
                 	set(tonumber(NewVal))
 				end
             end
