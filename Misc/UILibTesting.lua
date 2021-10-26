@@ -585,8 +585,8 @@ function RealZzLib:CreateMain(GameName, xyz)
 			
 			SliderValue.FocusLost:Connect(function()
 				if #SliderValue.Text > 0 then
-					if tonumber(s) ~= nil then
-					set(tonumber(SliderValue.Text))
+					if tonumber(SliderValue.Text) ~= nil then
+						set(tonumber(SliderValue.Text))
 					end
 				end
 			end)
@@ -612,7 +612,7 @@ function RealZzLib:CreateMain(GameName, xyz)
             local SliderT = {}
 
             function SliderT:Set(NewVal)
-				if tonumber(s) ~= nil then
+				if tonumber(NewVal) ~= nil then
                 	set(tonumber(NewVal))
 				end
             end
@@ -937,8 +937,8 @@ function RealZzLib:CreateMain(GameName, xyz)
                 for i,v in pairs(DropdownItemContainer:GetChildren()) do
                     v:Destroy()
                     DropdownItemContainer.Size =
-					UDim2.new(0, 315, 0, UIListLayout_3.AbsoluteContentSize.Y)
-				    cSize = UIListLayout_3.AbsoluteContentSize.Y
+					UDim2.new(0, 315, 0, 27)
+				    cSize = 27
                 end
             end
             function Dropdown:AddItem(Item)
