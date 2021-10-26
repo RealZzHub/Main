@@ -585,9 +585,9 @@ function RealZzLib:CreateMain(GameName, xyz)
 			
 			SliderValue.FocusLost:Connect(function()
 				if #SliderValue.Text > 0 then
-					set(tonumber(NewVal))
-					SliderValue.Text = ""
-					SliderValue.PlaceholderText = "..."
+					if tonumber(s) ~= nil then
+					set(tonumber(SliderValue.Text))
+					end
 				end
 			end)
 
@@ -612,7 +612,9 @@ function RealZzLib:CreateMain(GameName, xyz)
             local SliderT = {}
 
             function SliderT:Set(NewVal)
+				if tonumber(s) ~= nil then
                 	set(tonumber(NewVal))
+				end
             end
             return SliderT
 		end
@@ -863,7 +865,7 @@ function RealZzLib:CreateMain(GameName, xyz)
 
 			DToggleButton.Name = "ToggleButton"
 			DToggleButton.Parent = DropdownContainer
-			DToggleButton.BackgroundColor3 = Color3.fromRGB(102, 68, 132)
+			DToggleButton.BackgroundColor3 = Color3.fromRGB(166, 79, 219)
 			if not DToggled then
 				DToggleButton.BackgroundColor3 = Color3.fromRGB(166, 79, 219)
 			else
@@ -880,7 +882,7 @@ function RealZzLib:CreateMain(GameName, xyz)
 				DToggled = not DToggled
 				pcall(callback, CurItem, DToggled)
 
-				if not CurrentState then
+				if not DToggled then
 					DToggleButton.BackgroundColor3 = Color3.fromRGB(166, 79, 219)
 				else
 					DToggleButton.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
