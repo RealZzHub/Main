@@ -567,17 +567,29 @@ function RealZzLib:CreateMain(GameName, xyz)
 				UIListLayout_2.AbsoluteContentSize.Y)
 
 			local function set(v)
-                if v > MaxVal then
-                    v = MaxVal
-                elseif v < MinVal then
+				if v < MinVal then
                     v = MinVal
-                end
+                elseif v > MaxVal then
+                    v = MaxVal
+				end
 				SliderValue.Text = v
 				Slider2:TweenSize(UDim2.new((v - MinVal) / (MaxVal - MinVal), 0, 0, 6), "Out", "Quad", 0.05, true)
 				pcall(callback, v)
 			end
 			
 			set(Val)
+
+			SliderValue.Focused:Connect(function()
+				SliderValue.PlaceholderText = ""
+			end)
+			
+			TextBox.FocusLost:Connect(function()
+				if #TextBox.Text > 0 then
+					set(tonumber(NewVal))
+					SliderValue.Text = ""
+					SliderValue.PlaceholderText = "..."
+				end
+			end)
 
 			Slider.InputBegan:Connect(function(input)
 				if input.UserInputType == Enum.UserInputType.MouseButton1 then
@@ -600,9 +612,7 @@ function RealZzLib:CreateMain(GameName, xyz)
             local SliderT = {}
 
             function SliderT:Set(NewVal)
-				if type(v) == "number" then
                 	set(tonumber(NewVal))
-				end
             end
             return SliderT
 		end
@@ -717,7 +727,7 @@ function RealZzLib:CreateMain(GameName, xyz)
 			
 			TextBox.Focused:Connect(function()
 				TextBox.PlaceholderText = ""
-				end)
+			end)
 			
 			TextBox.FocusLost:Connect(function()
 				if #TextBox.Text > 0 then
