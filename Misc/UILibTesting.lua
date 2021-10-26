@@ -583,8 +583,8 @@ function RealZzLib:CreateMain(GameName, xyz)
 				SliderValue.PlaceholderText = ""
 			end)
 			
-			TextBox.FocusLost:Connect(function()
-				if #TextBox.Text > 0 then
+			SliderValue.FocusLost:Connect(function()
+				if #SliderValue.Text > 0 then
 					set(tonumber(NewVal))
 					SliderValue.Text = ""
 					SliderValue.PlaceholderText = "..."
@@ -924,7 +924,7 @@ function RealZzLib:CreateMain(GameName, xyz)
                 if DropdownItemContainer.Visible then
                     Dcloseopen()
                 end
-                for i,v in pairs(DropdownItemContainer:GetChildren) do
+                for i,v in pairs(DropdownItemContainer:GetChildren()) do
                     v:Destroy()
                     DropdownItemContainer.Size =
 					UDim2.new(0, 315, 0, UIListLayout_3.AbsoluteContentSize.Y)
