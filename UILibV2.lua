@@ -774,7 +774,7 @@ function Library:Main(GName)
 
             zzUIS.InputChanged:Connect(function(input)
                 if input.UserInputType == Enum.UserInputType.MouseMovement and SDragging == true then
-                    set(math.floor(MinVal + (math.clamp((input.Position.X - SliderBackground.AbsolutePosition.X) / SliderBackground.AbsoluteSize.X, 0, 1) * (MaxVal - MinVal))))
+                    set(MinVal + ((MaxVal - MinVal) * math.clamp((zzMouse.X - SliderBackground.AbsolutePosition.X) / SliderBackground.AbsoluteSize.X, 0, 1)))
                 end
             end)
             local SliderLibrary = {}
