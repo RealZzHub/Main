@@ -1189,12 +1189,12 @@ function Library:Main(GName)
         function ItemLibrary:NewColorpicker(CName, callback, Color)
             CName = tostring(CName) or "undefined"
             callback = callback or function() end
-            local CurrentColor = Color3.fromHSV(0, 0, 1)
+            local CurrentColor = Color3.fromHSV(0, 1, 1)
             local IsRainbow = false
             if Color == "Rainbow" then
                 IsRainbow = true
             else
-                CurrentColor = (Color and Color3.fromHSV(Color3.toHSV(Color))) or Color3.fromHSV(0, 0, 1)
+                CurrentColor = (Color and Color3.fromHSV(Color3.toHSV(Color))) or Color3.fromHSV(0, 1, 1)
             end
             local Ch, Cs, Cv
             local Dragging = false
