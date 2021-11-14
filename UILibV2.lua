@@ -1654,8 +1654,6 @@ function Library:Main(GName)
             if isfile("RealZzHub/" .. game.GameId .. "/" .. string.lower(NM) ..
                           ".json") or string.lower(NM) == "default" then
                 TabLibrary:Notify("Config already exists!", 2)
-            elseif string.find(string.lower(NM), ".", "") then
-                TabLibrary:Notify("Name cannot contain \".\"!", 2)
             else
                 writefile(
                     "RealZzHub/" .. game.GameId .. "/" .. string.lower(NM) ..
@@ -1681,4 +1679,4 @@ function Library:Main(GName)
 end
 
 return Library
---uwu owo ?!?
+-- owo?!?1
