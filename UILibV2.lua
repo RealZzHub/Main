@@ -1458,19 +1458,14 @@ function Library:Main(GName)
                 })
                 tween1:Play()
                 ColorpickerToggle.BackgroundColor3 = Color3.fromHSV(h, s, v)
-                SatBaseUIGradient.Color =
-                    ColorSequence.new(Color3.new(1, 1, 1),
-                                      Color3.fromHSV(h, 1, 1))
+                SatBaseUIGradient.Color = ColorSequence.new(Color3.new(1, 1, 1), Color3.fromHSV(h, 1, 1))
                 CurrentColor = Color3.fromHSV(h, s, v)
                 Ch, Cs, Cv = h, s, v
-                pcall(callback, Color3.fromRGB(CurrentColor.R, CurrentColor.G,
-                                               CurrentColor.B))
+                pcall(callback, Color3.fromHSV(h, s, v))
                 if IsRainbow then
                     Config[TName][CName] = "Rainbow"
                 else
-                    Config[TName][CName] =
-                        Color3.fromRGB(CurrentColor.R, CurrentColor.G,
-                                       CurrentColor.B)
+                    Config[TName][CName] = Color3.fromHSV(h, s, v)
                 end
             end
 
