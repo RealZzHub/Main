@@ -1648,7 +1648,7 @@ function Library:Main(GName)
                           zzHttpService:JSONEncode(Config))
             end
         end)
-        ConfigTab:NewTextBox("Name", function(v) NM = string.lower(v) end,
+        ConfigTab:NewTextBox("Config Name", function(v) NM = string.lower(v) end,
                              "...", true)
         ConfigTab:NewButton("Create", function()
             if isfile("RealZzHub/" .. game.GameId .. "/" .. string.lower(NM) ..
@@ -1679,4 +1679,3 @@ function Library:Main(GName)
 end
 
 return Library
--- owo?!?1
