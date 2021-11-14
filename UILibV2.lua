@@ -644,15 +644,14 @@ function Library:Main(GName)
             return ToggleLibrary
         end
 
-        function ItemLibrary:NewSlider(SName, MinVal, MaxVal, Inc, callback,
-                                       StartValue)
+        function ItemLibrary:NewSlider(SName, MinVal, MaxVal, Inc, callback, StartValue)
             SName = tostring(SName) or "undefined"
             MinVal = tonumber(MinVal) or 0
             MaxVal = tonumber(MaxVal) or 100
             Inc = tonumber(Inc) or 1
             callback = callback or function() end
             local Val = tonumber(StartValue) or MinVal
-            local Dragging = false
+            local SDragging = false
 
             local SliderFrame = Instance.new("Frame")
             local SliderFrameUICorner = Instance.new("UICorner")
@@ -663,22 +662,21 @@ function Library:Main(GName)
             local SliderText = Instance.new("TextLabel")
             local SliderValue = Instance.new("TextBox")
 
-            SliderFrame.Name = "SliderFrame"
+            SliderFrame.Name = SName.."SliderFrame"
             SliderFrame.Parent = NewTabContainer
             SliderFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
             SliderFrame.Position = UDim2.new(0.0315457396, 0, 0.414937645, 0)
             SliderFrame.Size = UDim2.new(0, 297, 0, 37)
 
             SliderFrameUICorner.CornerRadius = UDim.new(0, 4)
-            SliderFrameUICorner.Name = "SliderFrameUICorner"
+            SliderFrameUICorner.Name = SName.."SliderFrameUICorner"
             SliderFrameUICorner.Parent = SliderFrame
 
-            SliderBackground.Name = "SliderBackground"
+            SliderBackground.Name = SName.."SliderBackground"
             SliderBackground.Parent = SliderFrame
             SliderBackground.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
             SliderBackground.BorderSizePixel = 0
-            SliderBackground.Position = UDim2.new(0.0202020202, 0, 0.692000151,
-                                                  0)
+            SliderBackground.Position = UDim2.new(0.0202020202, 0, 0.692000151, 0)
             SliderBackground.Size = UDim2.new(0, 285, 0, 6)
             SliderBackground.AutoButtonColor = false
             SliderBackground.Font = Enum.Font.Gotham
@@ -686,7 +684,7 @@ function Library:Main(GName)
             SliderBackground.TextColor3 = Color3.fromRGB(0, 0, 0)
             SliderBackground.TextSize = 14.000
 
-            Slider.Name = "Slider"
+            Slider.Name = SName.."Slider"
             Slider.Parent = SliderBackground
             Slider.BackgroundColor3 = Color3.fromRGB(38, 229, 255)
             Slider.BorderSizePixel = 0
@@ -694,14 +692,14 @@ function Library:Main(GName)
             Slider.Size = UDim2.new(0, 130, 0, 6)
 
             SliderUICorner.CornerRadius = UDim.new(0, 4)
-            SliderUICorner.Name = "SliderUICorner"
+            SliderUICorner.Name = SName.."SliderUICorner"
             SliderUICorner.Parent = Slider
 
             SliderBackgroundUICorner.CornerRadius = UDim.new(0, 4)
-            SliderBackgroundUICorner.Name = "SliderBackgroundUICorner"
+            SliderBackgroundUICorner.Name = SName.."SliderBackgroundUICorner"
             SliderBackgroundUICorner.Parent = SliderBackground
 
-            SliderText.Name = "SliderText"
+            SliderText.Name = SName.."SliderText"
             SliderText.Parent = SliderFrame
             SliderText.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
             SliderText.BackgroundTransparency = 1.000
@@ -714,7 +712,7 @@ function Library:Main(GName)
             SliderText.TextSize = 13.000
             SliderText.TextXAlignment = Enum.TextXAlignment.Left
 
-            SliderValue.Name = "SliderValue"
+            SliderValue.Name = SName.."SliderValue"
             SliderValue.Parent = SliderFrame
             SliderValue.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
             SliderValue.BackgroundTransparency = 1.000
@@ -727,7 +725,7 @@ function Library:Main(GName)
             SliderValue.TextSize = 13.000
             SliderValue.TextXAlignment = Enum.TextXAlignment.Right
 
-            function set(v)
+            local function set(v)
                 if tonumber(v) then
                     if v < MinVal then
                         v = MinVal
@@ -735,21 +733,12 @@ function Library:Main(GName)
                         v = MaxVal
                     end
                     local a, b = math.modf(v / Inc)
-                    v = math.clamp(Inc * (a + (b > 0.5 and 1 or 0)), MinVal,
-                                   MaxVal)
+                    v = math.clamp(Inc * (a + (b > 0.5 and 1 or 0)), MinVal, MaxVal)
                     Val = v
                     SliderValue.Text = v
-                    Slider:TweenSize(
-                        UDim2.new((v - MinVal) / (MaxVal - MinVal), 0, 1, 0),
-                        "Out", "Quad", 0.05, true)
+                    Slider:TweenSize(UDim2.new((v - MinVal) / (MaxVal - MinVal), 0, 1, 0), "Out", "Quad", 0.05, true)
                     pcall(callback, tonumber(v))
                     Config[TName][SName] = tonumber(v)
-                else
-                    SliderValue.Text = Val
-                    Slider:TweenSize(UDim2.new((Val - MinVal) /
-                                                   (MaxVal - MinVal), 0, 1, 0),
-                                     "Out", "Quad", 0.05, true)
-                    pcall(callback, v)
                 end
             end
 
@@ -765,9 +754,7 @@ function Library:Main(GName)
                         set(tonumber(SliderValue.Text))
                     else
                         SliderValue.Text = Val
-                        Slider:TweenSize(
-                            UDim2.new((Val - MinVal) / (MaxVal - MinVal), 0, 1,
-                                      0), "Out", "Quad", 0.05, true)
+                        Slider:TweenSize(UDim2.new((Val - MinVal) / (MaxVal - MinVal), 0, 1, 0), "Out", "Quad", 0.05, true)
                         pcall(callback, v)
                     end
                 end
@@ -775,23 +762,19 @@ function Library:Main(GName)
 
             SliderBackground.InputBegan:Connect(function(input)
                 if input.UserInputType == Enum.UserInputType.MouseButton1 then
-                    Dragging = true
+                    SDragging = true
                 end
             end)
 
             SliderBackground.InputEnded:Connect(function(input)
                 if input.UserInputType == Enum.UserInputType.MouseButton1 then
-                    Dragging = false
+                    SDragging = false
                 end
             end)
 
             zzUIS.InputChanged:Connect(function(input)
-                if input.UserInputType == Enum.UserInputType.MouseMovement and
-                    Dragging == true then
-                    set(MinVal + ((MaxVal - MinVal) *
-                            math.clamp(
-                                (zzMouse.X - SliderBackground.AbsolutePosition.X) /
-                                    SliderBackground.AbsoluteSize.X, 0, 1)))
+                if input.UserInputType == Enum.UserInputType.MouseMovement and SDragging == true then
+                    set(math.floor(MinVal + (math.clamp((input.Position.X - SliderBackground.AbsolutePosition.X) / SliderBackground.AbsoluteSize.X, 0, 1) * (MaxVal - MinVal))))
                 end
             end)
             local SliderLibrary = {}
@@ -828,7 +811,7 @@ function Library:Main(GName)
             local TextBox = Instance.new("TextBox")
             local TextBoxUICorner = Instance.new("UICorner")
 
-            TextFrame.Name = "TextFrame"
+            TextFrame.Name = TBName.."TextFrame"
             TextFrame.Parent = NewTabContainer
             TextFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
             TextFrame.Position = UDim2.new(-0.0189274456, 0, 0.00333333341, 0)
@@ -838,7 +821,7 @@ function Library:Main(GName)
             TextFrameUICorner.Name = "TextFrameUICorner"
             TextFrameUICorner.Parent = TextFrame
 
-            TextText.Name = "TextText"
+            TextText.Name = TBName.."TextText"
             TextText.Parent = TextFrame
             TextText.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
             TextText.BackgroundTransparency = 1.000
@@ -851,7 +834,7 @@ function Library:Main(GName)
             TextText.TextSize = 13.000
             TextText.TextXAlignment = Enum.TextXAlignment.Left
 
-            TextBox.Name = "TextBox"
+            TextBox.Name = TBName.."TextBox"
             TextBox.Parent = TextFrame
             TextBox.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
             TextBox.Position = UDim2.new(0, 125, 0, 3)
@@ -865,7 +848,7 @@ function Library:Main(GName)
             TextBox.TextTruncate = 1
 
             TextBoxUICorner.CornerRadius = UDim.new(0, 4)
-            TextBoxUICorner.Name = "TextBoxUICorner"
+            TextBoxUICorner.Name = TBName.."TextBoxUICorner"
             TextBoxUICorner.Parent = TextBox
 
             TextBox.Focused:Connect(function()
@@ -909,7 +892,7 @@ function Library:Main(GName)
             local Keybind = Instance.new("TextButton")
             local KeybindUICorner = Instance.new("UICorner")
 
-            KeybindFrame.Name = "KeybindFrame"
+            KeybindFrame.Name = KName.."KeybindFrame"
             KeybindFrame.Parent = NewTabContainer
             KeybindFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
             KeybindFrame.Size = UDim2.new(0, 297, 0, 28)
@@ -918,7 +901,7 @@ function Library:Main(GName)
             KeybindFrameUICorner.Name = "KeybindFrameUICorner"
             KeybindFrameUICorner.Parent = KeybindFrame
 
-            KeybindText.Name = "KeybindText"
+            KeybindText.Name = KName.."KeybindText"
             KeybindText.Parent = KeybindFrame
             KeybindText.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
             KeybindText.BackgroundTransparency = 1.000
@@ -931,7 +914,7 @@ function Library:Main(GName)
             KeybindText.TextSize = 13.000
             KeybindText.TextXAlignment = Enum.TextXAlignment.Left
 
-            Keybind.Name = "Keybind"
+            Keybind.Name = KName.."Keybind"
             Keybind.Parent = KeybindFrame
             Keybind.BackgroundColor3 = Color3.fromRGB(38, 229, 255)
             Keybind.Position = UDim2.new(0, 183, 0, 3)
@@ -942,7 +925,7 @@ function Library:Main(GName)
             Keybind.TextSize = 13.000
 
             KeybindUICorner.CornerRadius = UDim.new(0, 4)
-            KeybindUICorner.Name = "KeybindUICorner"
+            KeybindUICorner.Name = KName.."KeybindUICorner"
             KeybindUICorner.Parent = Keybind
 
             zzUIS.InputBegan:connect(function(cur, pressed)
@@ -1004,16 +987,16 @@ function Library:Main(GName)
             local DropdownContainerFrameUIListLayout = Instance.new(
                                                            "UIListLayout")
 
-            DropdownToggleFrame.Name = "DropdownToggleFrame"
+            DropdownToggleFrame.Name = DName.."DropdownToggleFrame"
             DropdownToggleFrame.Parent = NewTabContainer
             DropdownToggleFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
             DropdownToggleFrame.Size = UDim2.new(0, 297, 0, 28)
 
             DropdownToggleFrameUICorner.CornerRadius = UDim.new(0, 4)
-            DropdownToggleFrameUICorner.Name = "DropdownToggleFrameUICorner"
+            DropdownToggleFrameUICorner.Name = DName.."DropdownToggleFrameUICorner"
             DropdownToggleFrameUICorner.Parent = DropdownToggleFrame
 
-            DropdownText.Name = "DropdownText"
+            DropdownText.Name = DName.."DropdownText"
             DropdownText.Parent = DropdownToggleFrame
             DropdownText.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
             DropdownText.BackgroundTransparency = 1.000
@@ -1029,7 +1012,7 @@ function Library:Main(GName)
             DropdownText.TextSize = 13.000
             DropdownText.TextXAlignment = Enum.TextXAlignment.Left
 
-            DropdownToggle.Name = "DropdownToggle"
+            DropdownToggle.Name = DName.."DropdownToggle"
             DropdownToggle.Parent = DropdownToggleFrame
             DropdownToggle.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
             DropdownToggle.BackgroundTransparency = 1.000
@@ -1040,7 +1023,7 @@ function Library:Main(GName)
             DropdownToggle.ImageColor3 = Color3.fromRGB(38, 229, 255)
             DropdownToggle.ScaleType = Enum.ScaleType.Crop
 
-            DropdownContainerFrame.Name = "DropdownContainerFrame"
+            DropdownContainerFrame.Name = DName.."DropdownContainerFrame"
             DropdownContainerFrame.Parent = NewTabContainer
             DropdownContainerFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
             DropdownContainerFrame.Position =
@@ -1697,4 +1680,16 @@ function Library:Main(GName)
 
 end
 
-return Library
+--return Library
+local Main = Library:Main("Kaiju Paradise")
+
+-- Tabs --
+local Tab = Main:NewTab("Main")
+
+Tab:NewSlider("Test1", 0,100,2,function(v)
+    print(v)
+end)
+
+Tab:NewSlider("Test2", -50,600,5,function(v)
+    print(v)
+end)
