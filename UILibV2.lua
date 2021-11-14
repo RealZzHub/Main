@@ -1194,9 +1194,7 @@ function Library:Main(GName)
             if Color == "Rainbow" then
                 IsRainbow = true
             else
-                CurrentColor =
-                    (Color and Color3.fromHSV(Color3.toHSV(Color))) or
-                        Color3.fromHSV(0, 0, 1)
+                CurrentColor = (Color and Color3.fromHSV(Color3.toHSV(Color))) or Color3.fromHSV(0, 0, 1)
             end
             local Ch, Cs, Cv
             local Dragging = false
@@ -1242,7 +1240,7 @@ function Library:Main(GName)
             ColorpickerText.Position = UDim2.new(0, 6, 0, 0)
             ColorpickerText.Size = UDim2.new(0, 216, 0, 28)
             ColorpickerText.Font = Enum.Font.Gotham
-            ColorpickerText.Text = "Example"
+            ColorpickerText.Text = CName
             ColorpickerText.TextColor3 = Color3.fromRGB(255, 255, 255)
             ColorpickerText.TextSize = 13.000
             ColorpickerText.TextXAlignment = Enum.TextXAlignment.Left
