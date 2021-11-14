@@ -1680,16 +1680,4 @@ function Library:Main(GName)
 
 end
 
---return Library
-local Main = Library:Main("Kaiju Paradise")
-
--- Tabs --
-local Tab = Main:NewTab("Main")
-
-Tab:NewSlider("Test1", 0,100,2,function(v)
-    print(v)
-end)
-
-Tab:NewSlider("Test2", -50,600,5,function(v)
-    print(v)
-end)
+return Library
