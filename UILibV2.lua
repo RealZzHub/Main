@@ -276,6 +276,7 @@ function Library:Main(GName)
         NotificationText.Size = UDim2.new(0, 267, 0, 38)
         NotificationText.Font = Enum.Font.Gotham
         NotificationText.Text = NText
+        NotificationText.MultiLine = true
         NotificationText.TextColor3 = Color3.fromRGB(255, 255, 255)
         NotificationText.TextSize = 12.000
         NotificationText.TextXAlignment = Enum.TextXAlignment.Left
