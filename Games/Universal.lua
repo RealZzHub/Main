@@ -113,7 +113,7 @@ function getTarget()
     local Mag = math.huge
     local plr = nil
     for i, v in pairs(zzPlayers:GetPlayers()) do 
-        if v ~= zzLPlayer and v.Character:FindFirstChild("HumanoidRootPart") then 
+        if v ~= zzLPlayer and v.Character and v.Character:FindFirstChild("HumanoidRootPart") then 
             if not Settings.Aimbot.TeamCheck or Settings.Aimbot.TeamCheck and v.Team ~= zzLPlayer.Team then
                 local Pos, onScreen = zzCamera:WorldToScreenPoint(v.Character[GetPart(v.Character)].Position) 
                 if onScreen then
