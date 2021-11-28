@@ -1,3 +1,5 @@
+-- UwU
+
 -- Settings --
 local Settings = {
     Visuals = {
@@ -40,9 +42,7 @@ FOV.Transparency = 1
 FOV.Visible = Settings.Aimbot.FOVUsed
 FOV.NumSides = 1000
 
-local Lib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/RealZzHub/Main/main/UI_Lib.lua'),true))()
-
-local Main = Lib:CreateMain("Universal")
+local Main = loadstring(game:HttpGet("https://raw.githubusercontent.com/RealZzHub/Main/main/UILibV2.lua", true))():Main("Unviersal")
 
 MainTab = Main:NewTab("Main")
 
@@ -55,23 +55,20 @@ end)
 MainTab:NewToggle("Team Check", function(state)
     Settings.Aimbot.TeamCheck = state
 end)
-MainTab:NewToggle("Visible Check", function(state)
-    Settings.Aimbot.VisibleCheck = state
-end)
-MainTab:NewSlider("Smoothness X", 10, 200, function(v)
-    Settings.Aimbot.SmoothnessX = v / 10
-end,10)
-MainTab:NewSlider("Smoothness Y", 10, 200, function(v)
-    Settings.Aimbot.SmoothnessY = v / 10
-end,10)
-MainTab:NewDropdown("Aim Part", {"Head"}, function(v)
+MainTab:NewSlider("Smoothness X", 1, 20, 0.1, function(v)
+    Settings.Aimbot.SmoothnessX = v
+end,1)
+MainTab:NewSlider("Smoothness Y", 1, 20, 0.1, function(v)
+    Settings.Aimbot.SmoothnessY = v 
+end,1)
+MainTab:NewDropdown("Aim Part", {"Head", "Torso/UpperTorso"}, function(v)
     Settings.Aimbot.AimbotPart = v
-end)
+end,true)
 MainTab:NewToggle("Use FOV", function(state)
     Settings.Aimbot.FOVUsed = state
     FOV.Visible = state
 end)
-MainTab:NewSlider("FOV Radius", 1,1000, function(v)
+MainTab:NewSlider("FOV Radius", 1,1000,1, function(v)
     Settings.Aimbot.FOVRadius = v
     FOV.Radius = v
 end, Settings.Aimbot.FOVRadius)
@@ -93,27 +90,36 @@ VisualsTab:NewToggle("Tracer ESP", function(state)
 end)
 VisualsTab:NewDropdown("Tracer Origin", {"Top", "Center", "Bottom", "Mouse"}, function(v)
     Settings.Visuals.FromTracer = v
-end)
+end,true)
 VisualsTab:NewToggle("Team Check", function(state)
     Settings.Visuals.TeamCheck = state
 end)
 
+Main:NewConfigTab()
+
 -- Aimbot --
+function GetPart(v)
+    if Settings.Aimbot.AimbotPart == "Torso/UpperTorso" then
+        return tostring(v:FindFirstChild("Torso") or v:FindFirstChild("UpperTorso"))
+    end
+    return "Head"
+end
+
 function IsVisible(Pos, List)
     return #zzCamera:GetPartsObscuringTarget({zzLPlayer.Character.Head.Position, Pos}, List) == 0 and true or false
 end
 
 function getTarget()
     local Mag = math.huge
-    local plr
+    local plr = nil
     for i, v in pairs(zzPlayers:GetPlayers()) do 
         if v ~= zzLPlayer and v.Character:FindFirstChild("HumanoidRootPart") then 
             if not Settings.Aimbot.TeamCheck or Settings.Aimbot.TeamCheck and v.Team ~= zzLPlayer.Team then
-                local Pos, onScreen = zzCamera:WorldToScreenPoint(v.Character[Settings.Aimbot.AimbotPart].Position) 
+                local Pos, onScreen = zzCamera:WorldToScreenPoint(v.Character[GetPart(v.Character)].Position) 
                 if onScreen then
                     local Dist = (Vector2.new(zzMouse.X, zzMouse.Y) - Vector2.new(Pos.X, Pos.Y)).Magnitude 
                     if not Settings.Aimbot.FOVUsed and Dist < Mag or Settings.Aimbot.FOVUsed and Dist < Mag and Dist < Settings.Aimbot.FOVRadius then
-                        if not Settings.Aimbot.VisibleCheck and true or Settings.Aimbot.VisibleCheck and IsVisible(v.Character[Settings.Aimbot.AimbotPart].Position, {v.Character, zzLPlayer.Character, zzCamera}) then 
+                        if not Settings.Aimbot.VisibleCheck and true or Settings.Aimbot.VisibleCheck and IsVisible(v.Character[GetPart(v.Character)].Position, {v.Character, zzLPlayer.Character, zzCamera}) then 
                         Mag = Dist
                         plr = v
                         end
@@ -134,7 +140,7 @@ zzRunService.RenderStepped:Connect(function()
     if Aiming and Settings.Aimbot.AimbotUsed then
         local plr = getTarget()
         if plr then
-            local Pos = zzCamera:WorldToViewportPoint(plr.Character[Settings.Aimbot.AimbotPart].Position)
+            local Pos = zzCamera:WorldToViewportPoint(plr.Character[GetPart(plr.Character)].Position)
             mousemoverel((Pos.X - MousePos.X) / Settings.Aimbot.SmoothnessX, (Pos.Y - MousePos.Y) / Settings.Aimbot.SmoothnessY)
         end
     end
@@ -193,6 +199,7 @@ function StartESP(plr)
     local Run
     Run = zzRunService.RenderStepped:Connect(function()
         if plr.Character ~= nil and plr.Character:FindFirstChild("HumanoidRootPart") and zzLPlayer ~= plr and plr then
+            if Settings.Visuals.Distance or Settings.Visuals.Name or Settings.Visuals.Esp or Settings.Visuals.Tracer then
            local _, onScreen = zzCamera:WorldToViewportPoint(plr.Character.HumanoidRootPart.Position)
 
 
@@ -206,25 +213,31 @@ function StartESP(plr)
             Box.Size = Vector2.new(2400 / RootPos.Z, HeadPos.Y - LegPos.Y)
             Box.Position = Vector2.new(RootPos.X - Box.Size.X / 2, RootPos.Y - Box.Size.Y / 2)
 
-            Name.Position = Vector2.new(RootPos.X, (RootPos.Y + Box.Size.Y / 2) - 25)
-            Name.Text = plr.Name
-
-            Dist.Position = Vector2.new(RootPos.X, (RootPos.Y - Box.Size.Y / 2) + 25)
-            Dist.Text = "["..tostring(math.floor((plr.Character.HumanoidRootPart.Position - zzCamera.CFrame.Position).Magnitude)).." Studs]"
-
             BoxOutline.Size = Vector2.new(2400 / RootPos.Z, HeadPos.Y - LegPos.Y)
             BoxOutline.Position = Vector2.new(RootPos.X - Box.Size.X / 2, RootPos.Y - Box.Size.Y / 2)
 
-            if Settings.Visuals.FromTracer == "Center" then
-            Tracer.From = Vector2.new(zzCamera.ViewportSize.X / 2, zzCamera.ViewportSize.Y / 2)
-            elseif Settings.Visuals.FromTracer == "Top" then
-                Tracer.From = Vector2.new(zzCamera.ViewportSize.X / 2, 0)
-            elseif Settings.Visuals.FromTracer == "Bottom" then
-                Tracer.From = Vector2.new(zzCamera.ViewportSize.X / 2, zzCamera.ViewportSize.Y)
-            elseif Settings.Visuals.FromTracer == "Mouse" then
-                Tracer.From = zzUIS:GetMouseLocation()
+            if Settings.Visuals.Name then
+                Name.Position = Vector2.new(RootPos.X, (RootPos.Y + Box.Size.Y / 2) - 25)
+                Name.Text = plr.Name
             end
-            Tracer.To = Vector2.new(RootPos.X, RootPos.Y - BoxOutline.Size.Y / 2)
+            
+            if Settings.Visuals.Distance then
+                Dist.Position = Vector2.new(RootPos.X, (RootPos.Y - Box.Size.Y / 2) + 25)
+                Dist.Text = "["..tostring(math.floor((plr.Character.HumanoidRootPart.Position - zzCamera.CFrame.Position).Magnitude)).." Studs]"
+            end
+
+            if Settings.Visuals.Tracer then
+                if Settings.Visuals.FromTracer == "Center" then
+                Tracer.From = Vector2.new(zzCamera.ViewportSize.X / 2, zzCamera.ViewportSize.Y / 2)
+                elseif Settings.Visuals.FromTracer == "Top" then
+                    Tracer.From = Vector2.new(zzCamera.ViewportSize.X / 2, 0)
+                elseif Settings.Visuals.FromTracer == "Bottom" then
+                    Tracer.From = Vector2.new(zzCamera.ViewportSize.X / 2, zzCamera.ViewportSize.Y)
+                elseif Settings.Visuals.FromTracer == "Mouse" then
+                    Tracer.From = zzUIS:GetMouseLocation()
+                end
+                Tracer.To = Vector2.new(RootPos.X, RootPos.Y - BoxOutline.Size.Y / 2)
+            end
             
 
             Dist.Color = plr.TeamColor.Color
@@ -260,6 +273,14 @@ function StartESP(plr)
             BoxOutline.Visible = false
             Tracer.Visible = false
            end
+        
+        else
+            Box.Visible = false
+            Name.Visible = false
+            Dist.Visible = false
+            BoxOutline.Visible = false
+            Tracer.Visible = false
+        end
 
         else
             Box.Visible = false
