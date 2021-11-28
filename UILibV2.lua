@@ -1580,55 +1580,50 @@ function Library:Main(GName)
         end
         local DefaultConfig = Config
         if DefaultConfig then
-            writefile("RealZzHub/" .. game.GameId .. "/default.json",
-                      zzHttpService:JSONEncode(DefaultConfig))
+            writefile("RealZzHub/" .. game.GameId .. "/default.json", zzHttpService:JSONEncode(DefaultConfig))
         end
         local configs = {"t"}
         local SelectedConfig
         local NM
         local ConfigTab = TabLibrary:NewTab("Configs")
 
-        local ConfigDropdown = ConfigTab:NewDropdown("Configs", configs,
-                                                     function(v)
+        local ConfigDropdown = ConfigTab:NewDropdown("Configs", configs, function(v)
             SelectedConfig = v
         end, true)
         ConfigDropdown:Clear()
         wait(0.2)
         for _, v in pairs(listfiles("RealZzHub/" .. game.GameId)) do
-            table.insert(configs, string.split(v, "RealZzHub/" .. game.GameId ..
-                                                   "\\")[2])
-            ConfigDropdown:AddItem(tostring(
-                                       string.split(v, "RealZzHub/" ..
-                                                        game.GameId .. "\\")[2]))
+            table.insert(configs, string.split(v, "RealZzHub/" .. game.GameId .. "\\")[2])
+            ConfigDropdown:AddItem(tostring(string.split(v, "RealZzHub/" .. game.GameId .. "\\")[2]))
         end
         ConfigDropdown:Set("default.json")
         ConfigTab:NewButton("Load", function()
-            local c = zzHttpService:JSONDecode(
-                          readfile("RealZzHub/" .. game.GameId .. "/" ..
-                                       string.lower(SelectedConfig)))
+            local c = zzHttpService:JSONDecode(readfile("RealZzHub/" .. game.GameId .. "/" .. string.lower(SelectedConfig)))
             for i, v in pairs(c) do
                 if Functions[i] then
                     for x, y in pairs(v) do
-                        Functions[i][x]:Set(y)
+                        if Functions[i] and Functions[i][x] then
+                            Functions[i][x]:Set(y)
+                        else
+                            TabLibrary:Notify(string.lower(SelectedConfig).." is outdated! Note: This does not destroy or break the config from working!", 2)     
+                        end
                     end
                 end
             end
+            TabLibrary:Notify(string.lower(SelectedConfig).." has been successfuly loaded!", 2)
         end)
         ConfigTab:NewButton("Delete", function()
             if string.lower(SelectedConfig) == "default.json" then
                 TabLibrary:Notify("default.json cannot be removed!", 2)
             else
-                delfile("RealZzHub/" .. game.GameId .. "/" ..
-                            string.lower(SelectedConfig))
+                delfile("RealZzHub/" .. game.GameId .. "/" .. string.lower(SelectedConfig))
+                TabLibrary:Notify(string.lower(SelectedConfig).." has been successfuly overwriten!", 2)
                 configs = {}
                 ConfigDropdown:Clear()
                 wait(1)
                 for _, v in pairs(listfiles("RealZzHub/" .. game.GameId)) do
-                    table.insert(configs, string.split(v, "RealZzHub/" ..
-                                                           game.GameId .. "\\")[2])
-                    ConfigDropdown:AddItem(
-                        tostring(string.split(v, "RealZzHub/" .. game.GameId ..
-                                                  "\\")[2]))
+                    table.insert(configs, string.split(v, "RealZzHub/" .. game.GameId .. "\\")[2])
+                    ConfigDropdown:AddItem(tostring(string.split(v, "RealZzHub/" .. game.GameId .. "\\")[2]))
                 end
                 ConfigDropdown:Set(configs[1])
             end
@@ -1637,30 +1632,24 @@ function Library:Main(GName)
             if string.lower(SelectedConfig) == "default.json" then
                 TabLibrary:Notify("Default.json cannot be overwriten!", 2)
             else
-                writefile("RealZzHub/" .. game.GameId .. "/" ..
-                              string.lower(SelectedConfig),
-                          zzHttpService:JSONEncode(Config))
+                writefile("RealZzHub/" .. game.GameId .. "/" .. string.lower(SelectedConfig), zzHttpService:JSONEncode(Config))
+                TabLibrary:Notify(string.lower(SelectedConfig).." has been successfully overwriten!", 2)
             end
         end)
         ConfigTab:NewTextBox("Config Name", function(v) NM = string.lower(v) end,
                              "...", true)
         ConfigTab:NewButton("Create", function()
-            if isfile("RealZzHub/" .. game.GameId .. "/" .. string.lower(NM) ..
-                          ".json") or string.lower(NM) == "default" then
+            if isfile("RealZzHub/" .. game.GameId .. "/" .. string.lower(NM) .. ".json") or string.lower(NM) == "default" then
                 TabLibrary:Notify("Config already exists!", 2)
             else
-                writefile(
-                    "RealZzHub/" .. game.GameId .. "/" .. string.lower(NM) ..
-                        ".json", zzHttpService:JSONEncode(Config))
+                writefile("RealZzHub/" .. game.GameId .. "/" .. string.lower(NM) ..".json", zzHttpService:JSONEncode(Config))
+                TabLibrary:Notify(string.lower(NM).." has been successfuly created!", 2)
                 configs = {}
                 ConfigDropdown:Clear()
                 wait(1)
                 for _, v in pairs(listfiles("RealZzHub/" .. game.GameId)) do
-                    table.insert(configs, string.split(v, "RealZzHub/" ..
-                                                           game.GameId .. "\\")[2])
-                    ConfigDropdown:AddItem(
-                        tostring(string.split(v, "RealZzHub/" .. game.GameId ..
-                                                  "\\")[2]))
+                    table.insert(configs, string.split(v, "RealZzHub/" .. game.GameId .. "\\")[2])
+                    ConfigDropdown:AddItem(tostring(string.split(v, "RealZzHub/" .. game.GameId .. "\\")[2]))
                 end
                 ConfigDropdown:Set(configs[1])
             end
