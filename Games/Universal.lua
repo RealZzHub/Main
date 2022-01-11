@@ -1,5 +1,3 @@
--- UwU
-
 -- Settings --
 local Settings = {
     Visuals = {
@@ -133,27 +131,28 @@ end
 
 local Aiming = false
 
+local AimPlayer = getTarget()
 zzRunService.RenderStepped:Connect(function()
     local MousePos = zzUIS:GetMouseLocation()
     FOV.Position = Vector2.new(MousePos.X, MousePos.Y)
 
     if Aiming and Settings.Aimbot.AimbotUsed then
-        local plr = getTarget()
-        if plr then
-            local Pos = zzCamera:WorldToViewportPoint(plr.Character[GetPart(plr.Character)].Position)
+        AimPlayer = getTarget()
+        if AimPlayer then
+            local Pos = zzCamera:WorldToViewportPoint(AimPlayer.Character[GetPart(AimPlayer.Character)].Position)
             mousemoverel((Pos.X - MousePos.X) / Settings.Aimbot.SmoothnessX, (Pos.Y - MousePos.Y) / Settings.Aimbot.SmoothnessY)
         end
     end
 end)
 
 zzUIS.InputEnded:Connect(function(v)
-    if v.KeyCode == Settings.Aimbot.AimbotKey then
+    if v.KeyCode == Settings.Aimbot.AimbotKey or v.UserInputType == Settings.Aimbot.AimbotKey then
         Aiming = false
     end
 end)
 
 zzUIS.InputBegan:Connect(function(v)
-    if v.KeyCode == Settings.Aimbot.AimbotKey then
+    if v.KeyCode == Settings.Aimbot.AimbotKey or v.UserInputType == Settings.Aimbot.AimbotKey then
         Aiming = true
     end
 end)
@@ -244,7 +243,7 @@ function StartESP(plr)
             Name.Color = plr.TeamColor.Color
             Box.Color = plr.TeamColor.Color
             Tracer.Color = plr.TeamColor.Color
-            if Settings.Aimbot.AimbotUsed and plr == getTarget() then
+            if Settings.Aimbot.AimbotUsed and plr == AimPlayer then
                 Dist.Color = Color3.new(1,1,1)
                 Name.Color = Color3.new(1,1,1)
                 Box.Color = Color3.new(1,1,1)
