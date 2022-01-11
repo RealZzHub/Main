@@ -135,9 +135,9 @@ local AimPlayer = getTarget()
 zzRunService.RenderStepped:Connect(function()
     local MousePos = zzUIS:GetMouseLocation()
     FOV.Position = Vector2.new(MousePos.X, MousePos.Y)
-
+    
+    AimPlayer = getTarget()
     if Aiming and Settings.Aimbot.AimbotUsed then
-        AimPlayer = getTarget()
         if AimPlayer then
             local Pos = zzCamera:WorldToViewportPoint(AimPlayer.Character[GetPart(AimPlayer.Character)].Position)
             mousemoverel((Pos.X - MousePos.X) / Settings.Aimbot.SmoothnessX, (Pos.Y - MousePos.Y) / Settings.Aimbot.SmoothnessY)
