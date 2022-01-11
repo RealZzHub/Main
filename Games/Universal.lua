@@ -199,6 +199,7 @@ function StartESP(plr)
     Run = zzRunService.RenderStepped:Connect(function()
         if plr.Character ~= nil and plr.Character:FindFirstChild("HumanoidRootPart") and zzLPlayer ~= plr and plr then
             if Settings.Visuals.Distance or Settings.Visuals.Name or Settings.Visuals.Esp or Settings.Visuals.Tracer then
+               if not Settings.Visuals.TeamCheck or Settings.Visuals.TeamCheck and plr.Team ~= zzLPlayer.Team then
            local _, onScreen = zzCamera:WorldToViewportPoint(plr.Character.HumanoidRootPart.Position)
 
 
@@ -249,20 +250,12 @@ function StartESP(plr)
                 Box.Color = Color3.new(1,1,1)
                 Tracer.Color = Color3.new(1,1,1)
             end
+            Dist.Visible = Settings.Visuals.Distance
+            Name.Visible = Settings.Visuals.Name
+            Box.Visible = Settings.Visuals.Esp
+            BoxOutline.Visible = Settings.Visuals.Esp
+            Tracer.Visible = Settings.Visuals.Tracer
 
-            if Settings.Visuals.TeamCheck and plr.Team == zzLPlayer.Team then
-                Box.Visible = false
-                Name.Visible = false
-                Dist.Visible = false
-                BoxOutline.Visible = false
-                Tracer.Visible = false
-            else
-                Dist.Visible = Settings.Visuals.Distance
-                Name.Visible = Settings.Visuals.Name
-                Box.Visible = Settings.Visuals.Esp
-                BoxOutline.Visible = Settings.Visuals.Esp
-                Tracer.Visible = Settings.Visuals.Tracer
-            end
 
 
            else
@@ -282,6 +275,13 @@ function StartESP(plr)
         end
 
         else
+            Box.Visible = false
+            Name.Visible = false
+            Dist.Visible = false
+            BoxOutline.Visible = false
+            Tracer.Visible = false
+        end
+          else
             Box.Visible = false
             Name.Visible = false
             Dist.Visible = false
