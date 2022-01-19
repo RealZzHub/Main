@@ -1,35 +1,5 @@
 --if ur a kaiju dev here then: hi!!!!!!!!!!
 
---no kaiju devs you cant detect krnl with this i just had to tell you fellas!
-if Krnl then
- function Callback(answer)
-        if answer == "Copy Link" then
-            setclipboard("https://fluxteam.xyz/")
-            game.StarterGui:SetCore("SendNotification", {
-        Title = "KRNL User";
-        Text = "Set Fluxus' website link to clipboard.";
-        Duration = "5";
-        Icon = "rbxassetid://1764960410"
-    })
-        elseif answer == "Cancel" then
---
-        end
-    end
-    
-    local Bindable = Instance.new("BindableFunction")
-    Bindable.OnInvoke = Callback
-    
-    game.StarterGui:SetCore("SendNotification", {
-        Title = "KRNL User";
-        Text = "KRNL can't run MoonSec's obfuscation, use Fluxus instead. Do you want to copy the link of Fluxus' website?";
-        Duration = "30";
-        Button1 = "Copy Link";
-        Button2 = "Cancel";
-        Icon = "rbxassetid://1764960410";
-        Callback = Bindable
-    })
-
-end
 
 _, Protected_by_MoonSecV2, Discord = 'discord.gg/gQEH2uZxUk'
 
