@@ -6,6 +6,8 @@ local zzRS = game:GetService("RunService")
 local zzTextService = game:GetService("TextService")
 local zzHttpService = game:GetService("HttpService")
 
+local RainbowSpeed = 5
+
 function Ripple(Button) -- thanks xbox | edited a little for this ui lib | Hey buy falconss uwu
 
     Button.ClipsDescendants = true
@@ -276,7 +278,6 @@ function Library:Main(GName)
         NotificationText.Size = UDim2.new(0, 267, 0, 38)
         NotificationText.Font = Enum.Font.Gotham
         NotificationText.Text = NText
-     --   NotificationText.MultiLine = true
         NotificationText.TextColor3 = Color3.fromRGB(255, 255, 255)
         NotificationText.TextSize = 12.000
         NotificationText.TextXAlignment = Enum.TextXAlignment.Left
@@ -519,6 +520,11 @@ function Library:Main(GName)
                 LabelBarRight.Size = UDim2.new(0, 55, 0, 1)
             end
 
+            local LabelLibrary = {}
+            function LabelLibrary:Set(v)
+                Label.Text = tostring(v)
+            end
+            return LabelLibrary
         end
 
         function ItemLibrary:NewButton(BName, callback)
@@ -1195,7 +1201,8 @@ function Library:Main(GName)
             if Color == "Rainbow" then
                 IsRainbow = true
             else
-                CurrentColor = (Color and Color3.fromHSV(Color3.toHSV(Color))) or Color3.fromHSV(0, 1, 1)
+                CurrentColor = Color
+                print(CurrentColor)
             end
             local Ch, Cs, Cv
             local Dragging = false
@@ -1248,7 +1255,7 @@ function Library:Main(GName)
 
             ColorpickerToggle.Name = "ColorpickerToggle"
             ColorpickerToggle.Parent = ColorpickerToggleFrame
-            ColorpickerToggle.BackgroundColor3 = CurrentColor
+            ColorpickerToggle.BackgroundColor3 = Color3.fromRGB(0,0,0)
             ColorpickerToggle.Position = UDim2.new(0, 222, 0, 3)
             ColorpickerToggle.Size = UDim2.new(0, 71, 0, 22)
             ColorpickerToggle.Font = Enum.Font.Gotham
@@ -1444,19 +1451,9 @@ function Library:Main(GName)
             end)
 
             local function set(h, s, v)
-                local tween = zzTweenService:Create(HueButton, TweenInfo.new(
-                                                        0.05,
-                                                        Enum.EasingStyle.Sine),
-                                                    {
-                    Position = UDim2.new(0.5, 0, h, 0)
-                })
+                local tween = zzTweenService:Create(HueButton, TweenInfo.new(0.05,Enum.EasingStyle.Sine),{Position = UDim2.new(0.5, 0, h, 0)})
                 tween:Play()
-                local tween1 = zzTweenService:Create(SatButton, TweenInfo.new(
-                                                         0.05,
-                                                         Enum.EasingStyle.Sine),
-                                                     {
-                    Position = UDim2.new(s, 0, 1 - v, 0)
-                })
+                local tween1 = zzTweenService:Create(SatButton, TweenInfo.new(0.05,Enum.EasingStyle.Sine),{Position = UDim2.new(s, 0, 1 - v, 0)})
                 tween1:Play()
                 ColorpickerToggle.BackgroundColor3 = Color3.fromHSV(h, s, v)
                 SatBaseUIGradient.Color = ColorSequence.new(Color3.new(1, 1, 1), Color3.fromHSV(h, 1, 1))
@@ -1470,11 +1467,14 @@ function Library:Main(GName)
                 end
             end
 
-            set(CurrentColor:ToHSV())
+            if not IsRainbow then
+                ColorpickerToggle.BackgroundColor3 = CurrentColor
+                set(Color3.toHSV(CurrentColor))
+            end
 
             task.spawn(function()
                 while IsRainbow do
-                    set(tick() % 7 / 7, Cs, Cv)
+                    set(tick() % RainbowSpeed / RainbowSpeed, Cs, Cv)
                     wait()
                 end
             end)
@@ -1543,7 +1543,7 @@ function Library:Main(GName)
                             Color3.fromRGB(20, 255, 20)
                         task.spawn(function()
                             while IsRainbow do
-                                set(tick() % 7 / 7, Cs, Cv)
+                                set(tick() % RainbowSpeed / RainbowSpeed, Cs, Cv)
                                 wait()
                             end
                         end)
@@ -1558,7 +1558,7 @@ function Library:Main(GName)
                     RainbowToggle.BackgroundColor3 = Color3.fromRGB(20, 255, 20)
                     task.spawn(function()
                         while IsRainbow do
-                            set(tick() % 7 / 7, Cs, Cv)
+                            set(tick() % RainbowSpeed / RainbowSpeed, Cs, Cv)
                             wait()
                         end
                     end)
@@ -1580,50 +1580,52 @@ function Library:Main(GName)
         end
         local DefaultConfig = Config
         if DefaultConfig then
-            writefile("RealZzHub/" .. game.GameId .. "/default.json", zzHttpService:JSONEncode(DefaultConfig))
+            writefile("RealZzHub/" .. game.GameId .. "/default.json",
+                      zzHttpService:JSONEncode(DefaultConfig))
         end
+
         local configs = {"t"}
         local SelectedConfig
         local NM
-        local ConfigTab = TabLibrary:NewTab("Configs")
-
+        local ConfigTab = TabLibrary:NewTab("Settings")
+        ConfigTab:NewLabel("Main", true)
+        ConfigTab:NewSlider("Rainbow Speed", 1,10,1,function(v)
+            RainbowSpeed = 11-v
+        end, 7)
+        ConfigTab:NewLabel("Configs", true)
         local ConfigDropdown = ConfigTab:NewDropdown("Configs", configs, function(v)
             SelectedConfig = v
         end, true)
         ConfigDropdown:Clear()
         wait(0.2)
-        for _, v in pairs(listfiles("RealZzHub/" .. game.GameId)) do
-            table.insert(configs, string.split(v, "RealZzHub/" .. game.GameId .. "\\")[2])
-            ConfigDropdown:AddItem(tostring(string.split(v, "RealZzHub/" .. game.GameId .. "\\")[2]))
+        for _, v in pairs(listfiles("RealZzHub/"..game.GameId)) do
+            table.insert(configs, string.split(v,"RealZzHub/"..game.GameId.."\\")[2])
+            ConfigDropdown:AddItem(tostring(string.split(v,"RealZzHub/"..game.GameId.."\\")[2]))
         end
         ConfigDropdown:Set("default.json")
         ConfigTab:NewButton("Load", function()
-            local c = zzHttpService:JSONDecode(readfile("RealZzHub/" .. game.GameId .. "/" .. string.lower(SelectedConfig)))
+            local c = zzHttpService:JSONDecode(readfile("RealZzHub/".. game.GameId.."/"..string.lower(SelectedConfig)))
             for i, v in pairs(c) do
-                if Functions[i] then
+                if Functions[i] and type(v) == "table" then
                     for x, y in pairs(v) do
-                        if Functions[i] and Functions[i][x] then
+                        if Functions[i][x] then
                             Functions[i][x]:Set(y)
-                        else
-                            TabLibrary:Notify(string.lower(SelectedConfig).." is outdated! Note: This does not destroy or break the config from working!", 2)     
                         end
                     end
                 end
             end
-            TabLibrary:Notify(string.lower(SelectedConfig).." has been successfuly loaded!", 2)
         end)
         ConfigTab:NewButton("Delete", function()
             if string.lower(SelectedConfig) == "default.json" then
                 TabLibrary:Notify("default.json cannot be removed!", 2)
             else
-                delfile("RealZzHub/" .. game.GameId .. "/" .. string.lower(SelectedConfig))
-                TabLibrary:Notify(string.lower(SelectedConfig).." has been successfuly overwriten!", 2)
+                delfile("RealZzHub/"..game.GameId.."/"..string.lower(SelectedConfig))
                 configs = {}
                 ConfigDropdown:Clear()
                 wait(1)
                 for _, v in pairs(listfiles("RealZzHub/" .. game.GameId)) do
-                    table.insert(configs, string.split(v, "RealZzHub/" .. game.GameId .. "\\")[2])
-                    ConfigDropdown:AddItem(tostring(string.split(v, "RealZzHub/" .. game.GameId .. "\\")[2]))
+                    table.insert(configs, string.split(v,"RealZzHub/"..game.GameId.."\\")[2])
+                    ConfigDropdown:AddItem(tostring(string.split(v,"RealZzHub/"..game.GameId .."\\")[2]))
                 end
                 ConfigDropdown:Set(configs[1])
             end
@@ -1632,28 +1634,32 @@ function Library:Main(GName)
             if string.lower(SelectedConfig) == "default.json" then
                 TabLibrary:Notify("Default.json cannot be overwriten!", 2)
             else
-                writefile("RealZzHub/" .. game.GameId .. "/" .. string.lower(SelectedConfig), zzHttpService:JSONEncode(Config))
-                TabLibrary:Notify(string.lower(SelectedConfig).." has been successfully overwriten!", 2)
+                writefile("RealZzHub/"..game.GameId .."/"..string.lower(SelectedConfig),zzHttpService:JSONEncode(Config))
             end
         end)
-        ConfigTab:NewTextBox("Config Name", function(v) NM = string.lower(v) end,
-                             "...", true)
+        ConfigTab:NewTextBox("Config Name", function(v) 
+            NM = string.lower(v) 
+        end, "...", true)
         ConfigTab:NewButton("Create", function()
-            if isfile("RealZzHub/" .. game.GameId .. "/" .. string.lower(NM) .. ".json") or string.lower(NM) == "default" then
+            if isfile("RealZzHub/"..game.GameId .."/"..string.lower(NM)..".json") or string.lower(NM) == "default" then
                 TabLibrary:Notify("Config already exists!", 2)
             else
-                writefile("RealZzHub/" .. game.GameId .. "/" .. string.lower(NM) ..".json", zzHttpService:JSONEncode(Config))
-                TabLibrary:Notify(string.lower(NM).." has been successfuly created!", 2)
+                writefile("RealZzHub/"..game.GameId.."/"..string.lower(NM)..".json",zzHttpService:JSONEncode(Config))
                 configs = {}
                 ConfigDropdown:Clear()
                 wait(1)
-                for _, v in pairs(listfiles("RealZzHub/" .. game.GameId)) do
-                    table.insert(configs, string.split(v, "RealZzHub/" .. game.GameId .. "\\")[2])
-                    ConfigDropdown:AddItem(tostring(string.split(v, "RealZzHub/" .. game.GameId .. "\\")[2]))
+                for _, v in pairs(listfiles("RealZzHub/"..game.GameId)) do
+                    table.insert(configs, string.split(v,"RealZzHub/"..game.GameId.."\\")[2])
+                    ConfigDropdown:AddItem(tostring(string.split(v,"RealZzHub/"..game.GameId.."\\")[2]))
                 end
                 ConfigDropdown:Set(configs[1])
             end
         end)
+
+        local Credits = string.split(tostring(game:HttpGet("https://raw.githubusercontent.com/RealZzHub/MainV2/main/Misc/Credits.txt")), ",")
+        ConfigTab:NewDropdown("Credits", Credits, function(v)
+            return
+        end, false)
 
     end
 
