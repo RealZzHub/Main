@@ -6,7 +6,7 @@ local zzRS = game:GetService("RunService")
 local zzTextService = game:GetService("TextService")
 local zzHttpService = game:GetService("HttpService")
 
-local RainbowSpeed = 5
+local RainbowSpeed = 7
 
 function Ripple(Button) -- thanks xbox | edited a little for this ui lib | Hey buy falconss uwu
 
