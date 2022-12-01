@@ -1430,7 +1430,7 @@ function Library:Main(GName)
                 if IsRainbow then
                     Config[TName][CName] = "Rainbow"
                 else
-                    Config[TName][CName] = Color3.fromHSV(h, s, v)
+                    Config[TName][CName] = "Color3.fromHSV("..h..", "..s..", "..v..")"
                 end
             end
 
@@ -1520,6 +1520,7 @@ function Library:Main(GName)
             local ColorpickerLibrary = {}
             function ColorpickerLibrary:Set(v)
                 IsRainbow = false
+                RainbowToggle.BackgroundColor3 = Color3.fromRGB(38, 229, 255)
                 if tostring(v) and tostring(v) == "Rainbow" then
                     IsRainbow = true
                     RainbowToggle.BackgroundColor3 = Color3.fromRGB(20, 255, 20)
@@ -1530,7 +1531,7 @@ function Library:Main(GName)
                         end
                     end)
                 else
-                    set(v:ToHSV())
+                    set(Color3.toHSV(loadstring(tostring("return "..v))()))
                 end
             end
             Functions[TName][CName] = ColorpickerLibrary
