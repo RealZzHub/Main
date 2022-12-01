@@ -1215,11 +1215,7 @@ function Library:Main(GName)
             local ColorpickerToggleUICorner = Instance.new("UICorner")
             local ColorpickerContainerFrame = Instance.new("Frame")
             local ColorpickerContainerFrameUICorner = Instance.new("UICorner")
-            local SatBase = Instance.new("Frame")
-            local SatBaseUIGradient = Instance.new("UIGradient")
-            local SatTop = Instance.new("Frame")
-            local SatTopUICorner = Instance.new("UICorner")
-            local SatTopUIGradient = Instance.new("UIGradient")
+            local SatBase = Instance.new("ImageLabel")
             local SatButton = Instance.new("ImageLabel")
             local SatBaseUICorner = Instance.new("UICorner")
             local HueBase = Instance.new("Frame")
@@ -1283,41 +1279,15 @@ function Library:Main(GName)
             SatBase.Name = "SatBase"
             SatBase.Parent = ColorpickerContainerFrame
             SatBase.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-            SatBase.Position = UDim2.new(0.0505050495, 0, 0.13861385, 0)
+            SatBase.BorderSizePixel = 0
+            SatBase.Position = UDim2.new(0.050999999, 0, 0.138999999, 0)
             SatBase.Size = UDim2.new(0, 110, 0, 72)
-
-            SatBaseUIGradient.Color = ColorSequence.new {
-                ColorSequenceKeypoint.new(0.00, Color3.fromRGB(255, 255, 255)),
-                ColorSequenceKeypoint.new(1.00, Color3.fromRGB(255, 0, 0))
-            }
-            SatBaseUIGradient.Name = "SatBaseUIGradient"
-            SatBaseUIGradient.Parent = SatBase
-
-            SatTop.Name = "SatTop"
-            SatTop.Parent = SatBase
-            SatTop.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-            SatTop.Size = UDim2.new(0, 110, 0, 72)
-
-            SatTopUICorner.CornerRadius = UDim.new(0, 3)
-            SatTopUICorner.Name = "SatTopUICorner"
-            SatTopUICorner.Parent = SatTop
-
-            SatTopUIGradient.Color = ColorSequence.new {
-                ColorSequenceKeypoint.new(0.00, Color3.fromRGB(0, 0, 0)),
-                ColorSequenceKeypoint.new(1.00, Color3.fromRGB(0, 0, 0))
-            }
-            SatTopUIGradient.Rotation = 270
-            SatTopUIGradient.Transparency =
-                NumberSequence.new {
-                    NumberSequenceKeypoint.new(0.00, 0.00),
-                    NumberSequenceKeypoint.new(1.00, 1.00),
-                    NumberSequenceKeypoint.new(1.00, 0.00)
-                }
-            SatTopUIGradient.Name = "SatTopUIGradient"
-            SatTopUIGradient.Parent = SatTop
+            SatBase.Image = "rbxassetid://11712625069"
+            SatBase.ImageColor3 = Color3.fromRGB(20, 3, 255)
+            
 
             SatButton.Name = "SatButton"
-            SatButton.Parent = SatTop
+            SatButton.Parent = SatBase
             SatButton.AnchorPoint = Vector2.new(0.5, 0.5)
             SatButton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
             SatButton.BackgroundTransparency = 1.000
@@ -1400,7 +1370,6 @@ function Library:Main(GName)
             HueButton.Visible = false
             HueBase.Visible = false
             SatButton.Visible = false
-            SatTop.Visible = false
             SatBase.Visible = false
             ColorpickerContainerFrame.Visible = false
 
@@ -1419,7 +1388,6 @@ function Library:Main(GName)
                         HueButton.Visible = true
                         HueBase.Visible = true
                         SatButton.Visible = true
-                        SatTop.Visible = true
                         SatBase.Visible = true
                     end)
                 else
@@ -1429,7 +1397,6 @@ function Library:Main(GName)
                     HueButton.Visible = false
                     HueBase.Visible = false
                     SatButton.Visible = false
-                    SatTop.Visible = false
                     SatBase.Visible = false
                     local tween = zzTweenService:Create(
                                       ColorpickerContainerFrame, TweenInfo.new(
@@ -1456,7 +1423,7 @@ function Library:Main(GName)
                 local tween1 = zzTweenService:Create(SatButton, TweenInfo.new(0.05,Enum.EasingStyle.Sine),{Position = UDim2.new(s, 0, 1 - v, 0)})
                 tween1:Play()
                 ColorpickerToggle.BackgroundColor3 = Color3.fromHSV(h, s, v)
-                SatBaseUIGradient.Color = ColorSequence.new(Color3.new(1, 1, 1), Color3.fromHSV(h, 1, 1))
+                SatBase.ImageColor3 = Color3.fromHSV(h, 1, 1)
                 CurrentColor = Color3.fromHSV(h, s, v)
                 Ch, Cs, Cv = h, s, v
                 pcall(callback, Color3.fromHSV(h, s, v))
