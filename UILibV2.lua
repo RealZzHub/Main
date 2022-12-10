@@ -741,8 +741,8 @@ function Library:Main(GName)
                     end
                     local a, b = math.modf(v / Inc)
                     v = math.clamp(Inc * (a + (b > 0.5 and 1 or 0)), MinVal, MaxVal)
-                    Val = v
-                    SliderValue.Text = v
+                    Val = string.format("%.14g", v)
+                    SliderValue.Text = string.format("%.14g", v)
                     Slider:TweenSize(UDim2.new((v - MinVal) / (MaxVal - MinVal), 0, 1, 0), "Out", "Quad", 0.05, true)
                     pcall(callback, tonumber(v))
                     Config[TName][SName] = tonumber(v)
@@ -1577,7 +1577,9 @@ function Library:Main(GName)
                 if Functions[i] and type(v) == "table" then
                     for x, y in pairs(v) do
                         if Functions[i][x] then
-                            Functions[i][x]:Set(y)
+                            pcall(function() --pcall just incase, cuz random shit be breaking the whole config. not bothered to replicate the actual issue or search for it so a temporary fix
+                                Functions[i][x]:Set(y)
+                            end)
                         end
                     end
                 end
