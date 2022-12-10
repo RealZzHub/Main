@@ -1205,6 +1205,7 @@ function Library:Main(GName)
                 print(CurrentColor)
             end
             local Ch, Cs, Cv
+            local Cr, Cg, Cb
             local Dragging = false
             local Open = false
 
@@ -1225,6 +1226,15 @@ function Library:Main(GName)
             local RainbowToggle = Instance.new("TextButton")
             local RainbowToggleUICorner = Instance.new("UICorner")
             local RainbowText = Instance.new("TextLabel")
+            local RTextBox = Instance.new("TextBox")
+            local RTextBoxUICorner = Instance.new("UICorner")
+            local GTextBox = Instance.new("TextBox")
+            local GTextBoxUICorner = Instance.new("UICorner")
+            local BTextBox = Instance.new("TextBox")
+            local BTextBoxUICorner = Instance.new("UICorner")
+            local RText = Instance.new("TextLabel")
+            local GText = Instance.new("TextLabel")
+            local BText = Instance.new("TextLabel")
 
             ColorpickerToggleFrame.Name = "ColorpickerToggleFrame"
             ColorpickerToggleFrame.Parent = NewTabContainer
@@ -1265,11 +1275,9 @@ function Library:Main(GName)
 
             ColorpickerContainerFrame.Name = "ColorpickerContainerFrame"
             ColorpickerContainerFrame.Parent = NewTabContainer
-            ColorpickerContainerFrame.BackgroundColor3 =
-                Color3.fromRGB(25, 25, 25)
-            ColorpickerContainerFrame.Position =
-                UDim2.new(0.0315457396, 0, 0.207468882, 0)
-            ColorpickerContainerFrame.Size = UDim2.new(0, 297, 0, 0.2)
+            ColorpickerContainerFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+            ColorpickerContainerFrame.Position = UDim2.new(0.0315457396, 0, 0.207468882, 0)
+            ColorpickerContainerFrame.Size = UDim2.new(0, 297, 0, 124)
 
             ColorpickerContainerFrameUICorner.CornerRadius = UDim.new(0, 4)
             ColorpickerContainerFrameUICorner.Name =
@@ -1280,8 +1288,8 @@ function Library:Main(GName)
             SatBase.Parent = ColorpickerContainerFrame
             SatBase.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
             SatBase.BorderSizePixel = 0
-            SatBase.Position = UDim2.new(0.050999999, 0, 0.138999999, 0)
-            SatBase.Size = UDim2.new(0, 110, 0, 72)
+            SatBase.Position = UDim2.new(0.0240638833, 0, 0.0806451589, 0)
+            SatBase.Size = UDim2.new(0, 147, 0, 108)
             SatBase.Image = "rbxassetid://11712625069"
             SatBase.ImageColor3 = Color3.fromRGB(20, 3, 255)
             
@@ -1304,8 +1312,8 @@ function Library:Main(GName)
             HueBase.Name = "HueBase"
             HueBase.Parent = ColorpickerContainerFrame
             HueBase.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-            HueBase.Position = UDim2.new(0.488215476, 0, 0.138613865, 0)
-            HueBase.Size = UDim2.new(0, 20, 0, 72)
+            HueBase.Position = UDim2.new(0.555000007, 0, 0.0810000002, 0)
+            HueBase.Size = UDim2.new(0, 20, 0, 107)
 
             HueBaseUICorner.CornerRadius = UDim.new(0, 4)
             HueBaseUICorner.Name = "HueBaseUICorner"
@@ -1341,7 +1349,7 @@ function Library:Main(GName)
             RainbowToggle.Name = "RainbowToggle"
             RainbowToggle.Parent = ColorpickerContainerFrame
             RainbowToggle.BackgroundColor3 = Color3.fromRGB(38, 229, 255)
-            RainbowToggle.Position = UDim2.new(0, 253, 0, 13)
+            RainbowToggle.Position = UDim2.new(0, 263, 0, 10)
             RainbowToggle.Size = UDim2.new(0, 22, 0, 22)
             RainbowToggle.Font = Enum.Font.Gotham
             RainbowToggle.Text = ""
@@ -1349,7 +1357,7 @@ function Library:Main(GName)
             RainbowToggle.TextSize = 13.000
 
             RainbowToggleUICorner.CornerRadius = UDim.new(0, 4)
-            RainbowToggleUICorner.Name = "ExampleKeybindUICorner"
+            RainbowToggleUICorner.Name = "RainbowToggleUICorner"
             RainbowToggleUICorner.Parent = RainbowToggle
 
             RainbowText.Name = "RainbowText"
@@ -1357,7 +1365,7 @@ function Library:Main(GName)
             RainbowText.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
             RainbowText.BackgroundTransparency = 1.000
             RainbowText.BorderSizePixel = 0
-            RainbowText.Position = UDim2.new(0, 185, 0, 10)
+            RainbowText.Position = UDim2.new(0, 197, 0, 7)
             RainbowText.Size = UDim2.new(0, 62, 0, 28)
             RainbowText.Font = Enum.Font.Gotham
             RainbowText.Text = "Rainbow:"
@@ -1365,8 +1373,101 @@ function Library:Main(GName)
             RainbowText.TextSize = 13.000
             RainbowText.TextXAlignment = Enum.TextXAlignment.Left
 
+            RTextBox.Name = "RTextBox"
+            RTextBox.Parent = ColorpickerContainerFrame
+            RTextBox.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+            RTextBox.Position = UDim2.new(0, 216, 0, 39)
+            RTextBox.Size = UDim2.new(0, 69, 0, 22)
+            RTextBox.Font = Enum.Font.Gotham
+            RTextBox.PlaceholderColor3 = Color3.fromRGB(255, 255, 255)
+            RTextBox.PlaceholderText = ""
+            RTextBox.Text = "255"
+            RTextBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+            RTextBox.TextSize = 13.000
+
+            RTextBoxUICorner.CornerRadius = UDim.new(0, 4)
+            RTextBoxUICorner.Name = "RTextBoxUICorner"
+            RTextBoxUICorner.Parent = RTextBox
+
+            GTextBox.Name = "GTextBox"
+            GTextBox.Parent = ColorpickerContainerFrame
+            GTextBox.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+            GTextBox.Position = UDim2.new(0, 216, 0, 68)
+            GTextBox.Size = UDim2.new(0, 69, 0, 22)
+            GTextBox.Font = Enum.Font.Gotham
+            GTextBox.PlaceholderColor3 = Color3.fromRGB(255, 255, 255)
+            GTextBox.PlaceholderText = ""
+            GTextBox.Text = "255"
+            GTextBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+            GTextBox.TextSize = 13.000
+
+            GTextBoxUICorner.CornerRadius = UDim.new(0, 4)
+            GTextBoxUICorner.Name = "GTextBoxUICorner"
+            GTextBoxUICorner.Parent = GTextBox
+
+            BTextBox.Name = "BTextBox"
+            BTextBox.Parent = ColorpickerContainerFrame
+            BTextBox.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+            BTextBox.Position = UDim2.new(0, 216, 0, 97)
+            BTextBox.Size = UDim2.new(0, 69, 0, 22)
+            BTextBox.Font = Enum.Font.Gotham
+            BTextBox.PlaceholderColor3 = Color3.fromRGB(255, 255, 255)
+            BTextBox.PlaceholderText = ""
+            BTextBox.Text = "255"
+            BTextBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+            BTextBox.TextSize = 13.000
+
+            BTextBoxUICorner.CornerRadius = UDim.new(0, 4)
+            BTextBoxUICorner.Name = "BTextBoxUICorner"
+            BTextBoxUICorner.Parent = BTextBox
+
+            RText.Name = "RText"
+            RText.Parent = ColorpickerContainerFrame
+            RText.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+            RText.BackgroundTransparency = 1.000
+            RText.BorderSizePixel = 0
+            RText.Position = UDim2.new(0, 197, 0, 36)
+            RText.Size = UDim2.new(0, 15, 0, 28)
+            RText.Font = Enum.Font.Gotham
+            RText.Text = "R:"
+            RText.TextColor3 = Color3.fromRGB(255, 255, 255)
+            RText.TextSize = 13.000
+            RText.TextXAlignment = Enum.TextXAlignment.Left
+
+            GText.Name = "GText"
+            GText.Parent = ColorpickerContainerFrame
+            GText.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+            GText.BackgroundTransparency = 1.000
+            GText.BorderSizePixel = 0
+            GText.Position = UDim2.new(0, 197, 0, 65)
+            GText.Size = UDim2.new(0, 15, 0, 28)
+            GText.Font = Enum.Font.Gotham
+            GText.Text = "G:"
+            GText.TextColor3 = Color3.fromRGB(255, 255, 255)
+            GText.TextSize = 13.000
+            GText.TextXAlignment = Enum.TextXAlignment.Left
+
+            BText.Name = "BText"
+            BText.Parent = ColorpickerContainerFrame
+            BText.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+            BText.BackgroundTransparency = 1.000
+            BText.BorderSizePixel = 0
+            BText.Position = UDim2.new(0, 198, 0, 94)
+            BText.Size = UDim2.new(0, 15, 0, 28)
+            BText.Font = Enum.Font.Gotham
+            BText.Text = "B:"
+            BText.TextColor3 = Color3.fromRGB(255, 255, 255)
+            BText.TextSize = 13.000
+            BText.TextXAlignment = Enum.TextXAlignment.Left
+
             RainbowText.Visible = false
             RainbowToggle.Visible = false
+            RTextBox.Visible = false
+            GTextBox.Visible = false
+            BTextBox.Visible = false
+            RText.Visible = false
+            GText.Visible = false
+            BText.Visible = false
             HueButton.Visible = false
             HueBase.Visible = false
             SatButton.Visible = false
@@ -1379,25 +1480,39 @@ function Library:Main(GName)
                     local tween = zzTweenService:Create(
                                       ColorpickerContainerFrame, TweenInfo.new(
                                           0.3, Enum.EasingStyle.Sine),
-                                      {Size = UDim2.new(0, 297, 0, 101)})
+                                      {Size = UDim2.new(0, 297, 0, 124)})
                     tween:Play()
                     tween.Completed:Connect(function()
                         Open = true
                         RainbowText.Visible = true
                         RainbowToggle.Visible = true
+                        RTextBox.Visible = true
+                        GTextBox.Visible = true
+                        BTextBox.Visible = true
+                        RText.Visible = true
+                        GText.Visible = true
+                        BText.Visible = true
                         HueButton.Visible = true
                         HueBase.Visible = true
                         SatButton.Visible = true
                         SatBase.Visible = true
+                        ColorpickerContainerFrame.Visible = true
                     end)
                 else
                     Open = false
                     RainbowText.Visible = false
                     RainbowToggle.Visible = false
+                    RTextBox.Visible = false
+                    GTextBox.Visible = false
+                    BTextBox.Visible = false
+                    RText.Visible = false
+                    GText.Visible = false
+                    BText.Visible = false
                     HueButton.Visible = false
                     HueBase.Visible = false
                     SatButton.Visible = false
                     SatBase.Visible = false
+                    ColorpickerContainerFrame.Visible = false
                     local tween = zzTweenService:Create(
                                       ColorpickerContainerFrame, TweenInfo.new(
                                           0.3, Enum.EasingStyle.Sine),
@@ -1426,6 +1541,10 @@ function Library:Main(GName)
                 SatBase.ImageColor3 = Color3.fromHSV(h, 1, 1)
                 CurrentColor = Color3.fromHSV(h, s, v)
                 Ch, Cs, Cv = h, s, v
+                Cr, Cg, Cb = math.floor((CurrentColor.R * 255) + 0.5), math.floor((CurrentColor.G * 255) + 0.5), math.floor((CurrentColor.B * 255) + 0.5)
+                RTextBox.Text = Cr
+                GTextBox.Text = Cg
+                BTextBox.Text = Cb
                 pcall(callback, Color3.fromHSV(h, s, v))
                 if IsRainbow then
                     Config[TName][CName] = "Rainbow"
@@ -1443,6 +1562,51 @@ function Library:Main(GName)
                 while IsRainbow do
                     set(tick() % RainbowSpeed / RainbowSpeed, Cs, Cv)
                     wait()
+                end
+            end)
+
+            RTextBox.FocusLost:Connect(function()
+                if #RTextBox.Text > 0 and tonumber(RTextBox.Text) then
+                    local Num = tonumber(RTextBox.Text)
+                    if Num < 0 then
+                        Num = 0
+                    elseif Num > 255 then
+                        Num = 255
+                    end
+                    local Color = Color3.fromRGB(Num, Cg, Cb)
+                    set(Color:ToHSV())
+                else
+                    set(Ch, Cs, Cv)
+                end
+            end)
+
+            GTextBox.FocusLost:Connect(function()
+                if #GTextBox.Text > 0 and tonumber(GTextBox.Text) then
+                    local Num = tonumber(GTextBox.Text)
+                    if Num < 0 then
+                        Num = 0
+                    elseif Num > 255 then
+                        Num = 255
+                    end
+                    local Color = Color3.fromRGB(Cr, Num, Cb)
+                    set(Color:ToHSV())
+                else
+                    set(Ch, Cs, Cv)
+                end
+            end)
+
+            BTextBox.FocusLost:Connect(function()
+                if #BTextBox.Text > 0 and tonumber(BTextBox.Text) then
+                    local Num = tonumber(BTextBox.Text)
+                    if Num < 0 then
+                        Num = 0
+                    elseif Num > 255 then
+                        Num = 255
+                    end
+                    local Color = Color3.fromRGB(Cr, Cg, Num)
+                    set(Color:ToHSV())
+                else
+                    set(Ch, Cs, Cv)
                 end
             end)
 
