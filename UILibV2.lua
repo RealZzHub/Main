@@ -5,17 +5,29 @@ local zzMouse = zzLPlayer:GetMouse()
 local zzRS = game:GetService("RunService")
 local zzTextService = game:GetService("TextService")
 local zzHttpService = game:GetService("HttpService")
+local zzContentProvider = game:GetService("ContentProvider")
+local Themes = loadstring(game:HttpGet("https://raw.githubusercontent.com/RealZzHub/MainV2/main/Misc/themes.lua", true))()
+
+task.spawn(function() --preloading xd xd xd
+    for _,v in pairs(Themes) do
+        local LogoPreload = Instance.new("Decal")
+        LogoPreload.Texture = v.Logo
+        local BackgroundPreload = Instance.new("Decal")
+        BackgroundPreload.Texture = v.Background
+        zzContentProvider:PreloadAsync(LogoPreload)
+        zzContentProvider:PreloadAsync(BackgroundPreload)
+    end
+end)
 
 local RainbowSpeed = 7
+local Theme = Themes[1]
+local IList = {} --we do trolling cuz its 11pm and I want to sleep
 
 function Ripple(Button) -- thanks xbox | edited a little for this ui lib | Hey buy falconss uwu
-
     Button.ClipsDescendants = true
     if Button:FindFirstChild("Circle") then return end
-
-    spawn(function()
+    task.spawn(function()
         local NewCircle = Instance.new("ImageLabel")
-
         NewCircle.Name = "NewCircle"
         NewCircle.BackgroundColor3 = Color3.fromRGB(1, 1, 1)
         NewCircle.BackgroundTransparency = 1.000
@@ -24,12 +36,8 @@ function Ripple(Button) -- thanks xbox | edited a little for this ui lib | Hey b
         NewCircle.ZIndex = 10
         NewCircle.Image = "rbxassetid://266543268"
         NewCircle.ImageTransparency = 0.89999997615814
-
         NewCircle.Parent = Button
-
-        NewCircle.Position = UDim2.new(0, zzMouse.X -
-                                           NewCircle.AbsolutePosition.X, 0,
-                                       zzMouse.Y - NewCircle.AbsolutePosition.Y)
+        NewCircle.Position = UDim2.new(0, zzMouse.X - NewCircle.AbsolutePosition.X, 0, zzMouse.Y - NewCircle.AbsolutePosition.Y)
 
         local Size = 0
 
@@ -40,29 +48,22 @@ function Ripple(Button) -- thanks xbox | edited a little for this ui lib | Hey b
         elseif Button.AbsoluteSize.X == Button.AbsoluteSize.Y then
             Size = Button.AbsoluteSize.X * 1.5
         end
-
-        NewCircle:TweenSizeAndPosition(UDim2.new(0, Size, 0, Size), UDim2.new(
-                                           0.5, -Size / 2, 0.5, -Size / 2),
-                                       "Out", "Quad", 0.5)
-
+        NewCircle:TweenSizeAndPosition(UDim2.new(0, Size, 0, Size), UDim2.new(0.5, -Size / 2, 0.5, -Size / 2), "Out", "Quad", 0.5)
         for Index = 1, 10 do
             NewCircle.ImageTransparency = NewCircle.ImageTransparency + 0.01
-
             wait(0.5 / 10)
         end
-
         NewCircle:Destroy()
     end)
 end
 
 local DraggingColorpicker = false
-function Drag(obj)
+function Drag(obj) -- don't know where I got it from, it is 3years old and still working so idc
     local dragging, dragInput, dragStart, startPos
 
     local function update(input)
         local delta = input.Position - dragStart
-        obj.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X,
-                                 startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+        obj.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X,startPos.Y.Scale, startPos.Y.Offset + delta.Y)
     end
 
     obj.InputBegan:Connect(function(input)
@@ -72,7 +73,6 @@ function Drag(obj)
                 dragging = true
                 dragStart = input.Position
                 startPos = obj.Position
-
                 input.Changed:Connect(function()
                     if input.UserInputState == Enum.UserInputState.End then
                         dragging = false
@@ -311,17 +311,13 @@ function Library:Main(GName)
             local notifies = Notifications:GetChildren()
             local offset = -25
             for i = #notifies, 1, -1 do
-                local tween = zzTweenService:Create(notifies[i], TweenInfo.new(
-                                                        0.20,
-                                                        Enum.EasingStyle.Sine),
-                                                    {
+                local tween = zzTweenService:Create(notifies[i], TweenInfo.new(0.20, Enum.EasingStyle.Sine), {
                     Position = UDim2.new(0.843282957, 0, 0.926073599, offset)
                 })
                 tween:Play()
                 offset = offset - (notifies[i].AbsoluteSize.Y + 10)
             end
         end
-
         organise()
 
         NotificationClose.InputBegan:Connect(function(input)
@@ -388,8 +384,7 @@ function Library:Main(GName)
 
         ContainerUIListLayout.Name = "ContainerUIListLayout"
         ContainerUIListLayout.Parent = NewTabContainer
-        ContainerUIListLayout.HorizontalAlignment =
-            Enum.HorizontalAlignment.Center
+        ContainerUIListLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
         ContainerUIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
         ContainerUIListLayout.Padding = UDim.new(0, 5)
 
@@ -418,7 +413,7 @@ function Library:Main(GName)
 
         TabToggle.Name = "TabToggle"
         TabToggle.Parent = TabButton
-        TabToggle.BackgroundColor3 = Color3.fromRGB(38, 229, 255)
+        TabToggle.BackgroundColor3 = Theme.Color1
         TabToggle.BorderSizePixel = 0
         TabToggle.Position = UDim2.new(0, 144, 0, 5)
         TabToggle.Size = UDim2.new(0, 22, 0, 22)
@@ -426,36 +421,33 @@ function Library:Main(GName)
         TabToggle.Text = ""
         TabToggle.TextColor3 = Color3.fromRGB(0, 0, 0)
         TabToggle.TextSize = 14.000
+        table.insert(IList, TabToggle)
 
         TabToggleUICorner.CornerRadius = UDim.new(0, 4)
         TabToggleUICorner.Name = "TabToggleUICorner"
         TabToggleUICorner.Parent = TabToggle
 
         if FirstTab then
-            TabToggle.BackgroundColor3 = Color3.fromRGB(20, 255, 20)
+            TabToggle.BackgroundColor3 = Theme.Color2
             NewTabContainer.Visible = true
             FirstTab = false
         end
 
-        ContainerUIListLayout:GetPropertyChangedSignal("AbsoluteContentSize")
-            :Connect(function()
-                NewTabContainer.CanvasSize = UDim2.new(0, 0, 0,
-                                                       ContainerUIListLayout.AbsoluteContentSize
-                                                           .Y)
-            end)
+        ContainerUIListLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
+            NewTabContainer.CanvasSize = UDim2.new(0, 0, 0,ContainerUIListLayout.AbsoluteContentSize.Y)
+        end)
 
         TabButton.InputBegan:Connect(function(input)
             if input.UserInputType == Enum.UserInputType.MouseButton1 then
                 for i, v in pairs(TabContainer:GetChildren()) do
                     if v ~= TabUIListLayout then
-                        v.TabToggle.BackgroundColor3 =
-                            Color3.fromRGB(38, 229, 255)
+                        v.TabToggle.BackgroundColor3 = Theme.Color1
                     end
                 end
                 for i, v in pairs(ContainerContainer:GetChildren()) do
                     v.Visible = false
                 end
-                TabToggle.BackgroundColor3 = Color3.fromRGB(20, 255, 20)
+                TabToggle.BackgroundColor3 = Theme.Color2
                 NewTabContainer.Visible = true
                 Ripple(TabButton)
             end
@@ -464,14 +456,13 @@ function Library:Main(GName)
             if input.UserInputType == Enum.UserInputType.MouseButton1 then
                 for i, v in pairs(TabContainer:GetChildren()) do
                     if v ~= TabUIListLayout then
-                        v.TabToggle.BackgroundColor3 =
-                            Color3.fromRGB(38, 229, 255)
+                        v.TabToggle.BackgroundColor3 = Theme.Color1
                     end
                 end
                 for i, v in pairs(ContainerContainer:GetChildren()) do
                     v.Visible = false
                 end
-                TabToggle.BackgroundColor3 = Color3.fromRGB(20, 255, 20)
+                TabToggle.BackgroundColor3 = Theme.Color2
                 NewTabContainer.Visible = true
                 Ripple(TabButton)
             end
@@ -547,13 +538,14 @@ function Library:Main(GName)
 
             ButtonButton.Name = "ButtonButton"
             ButtonButton.Parent = ButtonFrame
-            ButtonButton.BackgroundColor3 = Color3.fromRGB(38, 229, 255)
+            ButtonButton.BackgroundColor3 = Theme.Color1
             ButtonButton.Position = UDim2.new(0, 4, 0, 4)
             ButtonButton.Size = UDim2.new(1, -8, 1, -8)
             ButtonButton.Font = Enum.Font.Gotham
             ButtonButton.Text = BName
             ButtonButton.TextColor3 = Color3.fromRGB(0, 0, 0)
             ButtonButton.TextSize = 13.000
+            table.insert(IList, ButtonButton)
 
             ButtonButtonUICorner.CornerRadius = UDim.new(0, 4)
             ButtonButtonUICorner.Name = "ButtonButtonUICorner"
@@ -603,9 +595,9 @@ function Library:Main(GName)
             ToggleToggle.Name = "ToggleToggle"
             ToggleToggle.Parent = ToggleFrame
             if not CurrentState then
-                ToggleToggle.BackgroundColor3 = Color3.fromRGB(38, 229, 255)
+                ToggleToggle.BackgroundColor3 = Theme.Color1
             else
-                ToggleToggle.BackgroundColor3 = Color3.fromRGB(20, 255, 20)
+                ToggleToggle.BackgroundColor3 = Theme.Color2
             end
             pcall(callback, CurrentState)
             Config[TName][TGName] = CurrentState
@@ -623,15 +615,14 @@ function Library:Main(GName)
                     Config[TName][TGName] = CurrentState
 
                     if not CurrentState then
-                        ToggleToggle.BackgroundColor3 =
-                            Color3.fromRGB(38, 229, 255)
+                        ToggleToggle.BackgroundColor3 = Theme.Color1
                     else
-                        ToggleToggle.BackgroundColor3 =
-                            Color3.fromRGB(20, 255, 20)
+                        ToggleToggle.BackgroundColor3 = Theme.Color2
                     end
                     Ripple(ToggleFrame)
                 end
             end)
+            table.insert(IList, ToggleToggle)
 
             ToggleToggleUICorner.CornerRadius = UDim.new(0, 4)
             ToggleToggleUICorner.Name = "ToggleToggleUICorner"
@@ -642,9 +633,9 @@ function Library:Main(GName)
                 pcall(callback, CurrentState)
 
                 if not CurrentState then
-                    ToggleToggle.BackgroundColor3 = Color3.fromRGB(38, 229, 255)
+                    ToggleToggle.BackgroundColor3 = Theme.Color1
                 else
-                    ToggleToggle.BackgroundColor3 = Color3.fromRGB(20, 255, 20)
+                    ToggleToggle.BackgroundColor3 = Theme.Color2
                 end
             end
             Functions[TName][TGName] = ToggleLibrary
@@ -693,10 +684,11 @@ function Library:Main(GName)
 
             Slider.Name = SName.."Slider"
             Slider.Parent = SliderBackground
-            Slider.BackgroundColor3 = Color3.fromRGB(38, 229, 255)
+            Slider.BackgroundColor3 = Theme.Color1
             Slider.BorderSizePixel = 0
             Slider.Position = UDim2.new(-0.00355871883, 1, -0.266666681, 1)
             Slider.Size = UDim2.new(0, 130, 0, 6)
+            table.insert(IList, Slider)
 
             SliderUICorner.CornerRadius = UDim.new(0, 4)
             SliderUICorner.Name = SName.."SliderUICorner"
@@ -923,13 +915,14 @@ function Library:Main(GName)
 
             Keybind.Name = KName.."Keybind"
             Keybind.Parent = KeybindFrame
-            Keybind.BackgroundColor3 = Color3.fromRGB(38, 229, 255)
+            Keybind.BackgroundColor3 = Theme.Color1
             Keybind.Position = UDim2.new(0, 183, 0, 3)
             Keybind.Size = UDim2.new(0, 110, 0, 22)
             Keybind.Font = Enum.Font.Gotham
             Keybind.Text = "[ " .. CurrentKey .. " ]"
             Keybind.TextColor3 = Color3.fromRGB(0, 0, 0)
             Keybind.TextSize = 13.000
+            table.insert(IList, Keybind)
 
             KeybindUICorner.CornerRadius = UDim.new(0, 4)
             KeybindUICorner.Name = KName.."KeybindUICorner"
@@ -975,11 +968,11 @@ function Library:Main(GName)
             return KeybindLibrary
         end
 
-        function ItemLibrary:NewDropdown(DName, Items, callback, ShowItem)
+        function ItemLibrary:NewDropdown(DName, Items, callback, ShowItem, UseItem)
             DName = tostring(DName) or "undefined"
             callback = callback or function() end
             ShowItem = ShowItem or false
-            local Item = Items[1]
+            local Item = UseItem and UseItem or not UseItem and Items[1]
             local Open = false
 
             pcall(callback, Item)
@@ -1027,8 +1020,9 @@ function Library:Main(GName)
             DropdownToggle.Rotation = -90.000
             DropdownToggle.Size = UDim2.new(0, 25, 0, 25)
             DropdownToggle.Image = "http://www.roblox.com/asset/?id=3192533593"
-            DropdownToggle.ImageColor3 = Color3.fromRGB(38, 229, 255)
+            DropdownToggle.ImageColor3 = Theme.Color1
             DropdownToggle.ScaleType = Enum.ScaleType.Crop
+            table.insert(IList, DropdownToggle)
 
             DropdownContainerFrame.Name = DName.."DropdownContainerFrame"
             DropdownContainerFrame.Parent = NewTabContainer
@@ -1348,13 +1342,14 @@ function Library:Main(GName)
 
             RainbowToggle.Name = "RainbowToggle"
             RainbowToggle.Parent = ColorpickerContainerFrame
-            RainbowToggle.BackgroundColor3 = Color3.fromRGB(38, 229, 255)
+            RainbowToggle.BackgroundColor3 = Theme.Color1
             RainbowToggle.Position = UDim2.new(0, 263, 0, 10)
             RainbowToggle.Size = UDim2.new(0, 22, 0, 22)
             RainbowToggle.Font = Enum.Font.Gotham
             RainbowToggle.Text = ""
             RainbowToggle.TextColor3 = Color3.fromRGB(0, 0, 0)
             RainbowToggle.TextSize = 13.000
+            table.insert(IList, RainbowToggle)
 
             RainbowToggleUICorner.CornerRadius = UDim.new(0, 4)
             RainbowToggleUICorner.Name = "RainbowToggleUICorner"
@@ -1615,8 +1610,7 @@ function Library:Main(GName)
                     not Dragging then
                     if IsRainbow then
                         IsRainbow = false
-                        RainbowToggle.BackgroundColor3 =
-                            Color3.fromRGB(38, 229, 255)
+                        RainbowToggle.BackgroundColor3 = Theme.Color1
                     end
                     Dragging = true
                     DraggingColorpicker = true
@@ -1667,11 +1661,9 @@ function Library:Main(GName)
                 if input.UserInputType == Enum.UserInputType.MouseButton1 then
                     IsRainbow = not IsRainbow
                     if not IsRainbow then
-                        RainbowToggle.BackgroundColor3 =
-                            Color3.fromRGB(38, 229, 255)
+                        RainbowToggle.BackgroundColor3 = Theme.Color1
                     else
-                        RainbowToggle.BackgroundColor3 =
-                            Color3.fromRGB(20, 255, 20)
+                        RainbowToggle.BackgroundColor3 = Theme.Color2
                         task.spawn(function()
                             while IsRainbow do
                                 set(tick() % RainbowSpeed / RainbowSpeed, Cs, Cv)
@@ -1684,10 +1676,10 @@ function Library:Main(GName)
             local ColorpickerLibrary = {}
             function ColorpickerLibrary:Set(v)
                 IsRainbow = false
-                RainbowToggle.BackgroundColor3 = Color3.fromRGB(38, 229, 255)
+                RainbowToggle.BackgroundColor3 = Theme.Color1
                 if tostring(v) and tostring(v) == "Rainbow" then
                     IsRainbow = true
-                    RainbowToggle.BackgroundColor3 = Color3.fromRGB(20, 255, 20)
+                    RainbowToggle.BackgroundColor3 = Theme.Color2
                     task.spawn(function()
                         while IsRainbow do
                             set(tick() % RainbowSpeed / RainbowSpeed, Cs, Cv)
@@ -1705,22 +1697,58 @@ function Library:Main(GName)
         return ItemLibrary
     end
 
-    function TabLibrary:NewConfigTab()
+    function TabLibrary:NewConfigTab(CustomCredits) --messy xd
         if not isfolder("RealZzHub") then makefolder("RealZzHub") end
         if not isfolder("RealZzHub/" .. game.GameId) then
             makefolder("RealZzHub/" .. game.GameId)
         end
         local DefaultConfig = Config
         if DefaultConfig then
-            writefile("RealZzHub/" .. game.GameId .. "/default.json",
-                      zzHttpService:JSONEncode(DefaultConfig))
+            writefile("RealZzHub/" .. game.GameId .. "/default.json", zzHttpService:JSONEncode(DefaultConfig))
         end
 
         local configs = {"t"}
         local SelectedConfig
         local NM
         local ConfigTab = TabLibrary:NewTab("Settings")
+
+        local ThemesList = {}
+        for _,v in pairs(Themes) do
+            table.insert(ThemesList, v.Name)
+        end
+
+        local function UpdateTheme(SelectedTheme)
+            local OldTheme = Theme
+            Theme = nil
+            for _,v in pairs(Themes) do
+                if v.Name == SelectedTheme then
+                    Theme = v
+                    break
+                end
+            end
+            MainBackground.Image = Theme.Background
+            Logo.Image = Theme.Logo
+            for _,v in pairs(IList) do
+                if v:IsA("ImageButton") then
+                    if v.ImageColor3 == OldTheme.Color1 then
+                        v.ImageColor3 = Theme.Color1
+                    else
+                        v.ImageColor3 = Theme.Color2
+                    end
+                else
+                    if v.BackgroundColor3 == OldTheme.Color1 then
+                        v.BackgroundColor3 = Theme.Color1
+                    else
+                        v.BackgroundColor3 = Theme.Color2
+                    end
+                end
+            end
+        end
+
         ConfigTab:NewLabel("Main", true)
+        ConfigTab:NewDropdown("Theme", ThemesList, function(v)
+            UpdateTheme(v)
+        end, true)
         ConfigTab:NewSlider("Rainbow Speed", 1,10,1,function(v)
             RainbowSpeed = 11-v
         end, 7)
@@ -1790,7 +1818,7 @@ function Library:Main(GName)
             end
         end)
 
-        local Credits = string.split(tostring(game:HttpGet("https://raw.githubusercontent.com/RealZzHub/MainV2/main/Misc/Credits.txt")), ",")
+        local Credits = string.split(CustomCredits, ",") or string.split(tostring(game:HttpGet("https://raw.githubusercontent.com/RealZzHub/MainV2/main/Misc/Credits.txt")), ",")
         ConfigTab:NewDropdown("Credits", Credits, function(v)
             return
         end, false)
