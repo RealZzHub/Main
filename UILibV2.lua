@@ -1817,8 +1817,8 @@ function Library:Main(GName)
                 ConfigDropdown:Set(configs[1])
             end
         end)
-
-        local Credits = string.split(CustomCredits, ",") or string.split(tostring(game:HttpGet("https://raw.githubusercontent.com/RealZzHub/MainV2/main/Misc/Credits.txt")), ",")
+        CustomCredits = CustomCredits or tostring(game:HttpGet("https://raw.githubusercontent.com/RealZzHub/MainV2/main/Misc/Credits.txt")
+        local Credits = string.split(CustomCredits), ",")
         ConfigTab:NewDropdown("Credits", Credits, function(v)
             return
         end, false)
