@@ -14,8 +14,7 @@ task.spawn(function() --preloading xd xd xd
         LogoPreload.Texture = v.Logo
         local BackgroundPreload = Instance.new("Decal")
         BackgroundPreload.Texture = v.Background
-        zzContentProvider:PreloadAsync(LogoPreload)
-        zzContentProvider:PreloadAsync(BackgroundPreload)
+        zzContentProvider:PreloadAsync({LogoPreload, BackgroundPreload})
     end
 end)
 
@@ -884,6 +883,7 @@ function Library:Main(GName)
             KName = tostring(KName) or "undefined"
             callback = callback or function() end
             local CurrentKey = Key.Name
+            Config[TName][KName] = Key.Name
 
             local KeybindFrame = Instance.new("Frame")
             local KeybindFrameUICorner = Instance.new("UICorner")
@@ -930,11 +930,8 @@ function Library:Main(GName)
 
             zzUIS.InputBegan:connect(function(cur, pressed)
                 if not pressed then
-                    if cur.KeyCode.Name == CurrentKey or cur.UserInputType.Name ==
-                        CurrentKey then
-                        pcall(callback,
-                              ((cur.UserInputType == Enum.UserInputType.Keyboard and
-                                  cur.KeyCode) or cur.UserInputType))
+                    if cur.KeyCode.Name == CurrentKey or cur.UserInputType.Name == CurrentKey then
+                        pcall(callback, ((cur.UserInputType == Enum.UserInputType.Keyboard and cur.KeyCode) or cur.UserInputType))
                     end
                 end
             end)
@@ -943,20 +940,9 @@ function Library:Main(GName)
                 Keybind.Text = "[ ... ]"
                 Ripple(KeybindFrame)
                 local i = zzUIS.InputBegan:wait()
-                Keybind.Text = "[ " ..
-                                   tostring(
-                                       (i.UserInputType ==
-                                           Enum.UserInputType.Keyboard and
-                                           i.KeyCode.Name) or
-                                           i.UserInputType.Name) .. " ]"
-                CurrentKey = tostring((i.UserInputType ==
-                                          Enum.UserInputType.Keyboard and
-                                          i.KeyCode.Name) or
-                                          i.UserInputType.Name)
-                Config[TName][KName] = (i.UserInputType ==
-                                           Enum.UserInputType.Keyboard and
-                                           i.KeyCode.Name) or
-                                           i.UserInputType.Name
+                Keybind.Text = "[ "..tostring((i.UserInputType == Enum.UserInputType.Keyboard and i.KeyCode.Name) or i.UserInputType.Name) .. " ]"
+                CurrentKey = tostring((i.UserInputType == Enum.UserInputType.Keyboard and i.KeyCode.Name) or i.UserInputType.Name)
+                Config[TName][KName] = (i.UserInputType == Enum.UserInputType.Keyboard and i.KeyCode.Name) or i.UserInputType.Name
             end)
             local KeybindLibrary = {}
             function KeybindLibrary:Set(v)
@@ -1034,12 +1020,10 @@ function Library:Main(GName)
             DropdownContainerFrame.BorderSizePixel = 0
 
             DropdownContainerFrameUICorner.CornerRadius = UDim.new(0, 4)
-            DropdownContainerFrameUICorner.Name =
-                "DropdownContainerFrameUICorner"
+            DropdownContainerFrameUICorner.Name = "DropdownContainerFrameUICorner"
             DropdownContainerFrameUICorner.Parent = DropdownContainerFrame
 
-            DropdownContainerFrameUIListLayout.Name =
-                "DropdownContainerFrameUIListLayout"
+            DropdownContainerFrameUIListLayout.Name = "DropdownContainerFrameUIListLayout"
             DropdownContainerFrameUIListLayout.Parent = DropdownContainerFrame
             DropdownContainerFrameUIListLayout.SortOrder = Enum.SortOrder
                                                                .LayoutOrder
@@ -1048,13 +1032,8 @@ function Library:Main(GName)
                 if not Open and (#Items - 1) > 0 then
                     Open = true
                     DropdownContainerFrame.Visible = true
-                    local tween = zzTweenService:Create(DropdownContainerFrame,
-                                                        TweenInfo.new(0.3,
-                                                                      Enum.EasingStyle
-                                                                          .Sine),
-                                                        {
-                        Size = UDim2.new(0, 297, 0,
-                                         math.min(((#Items) * 28), 500))
+                    local tween = zzTweenService:Create(DropdownContainerFrame, TweenInfo.new(0.3, Enum.EasingStyle.Sine), {
+                        Size = UDim2.new(0, 297, 0, math.min(((#Items) * 28), 500))
                     })
                     tween:Play()
                     tween.Completed:Connect(function()
@@ -1065,14 +1044,7 @@ function Library:Main(GName)
                             end
                         end
                     end)
-                    local tween1 = zzTweenService:Create(DropdownToggle,
-                                                         TweenInfo.new(0.3,
-                                                                       Enum.EasingStyle
-                                                                           .Linear,
-                                                                       Enum.EasingDirection
-                                                                           .In,
-                                                                       0),
-                                                         {Rotation = 90})
+                    local tween1 = zzTweenService:Create(DropdownToggle, TweenInfo.new(0.3, Enum.EasingStyle.Linear,Enum.EasingDirection.In, 0), {Rotation = 90})
                     tween1:Play()
                 else
                     Open = false
@@ -1082,11 +1054,7 @@ function Library:Main(GName)
                             v.Visible = false
                         end
                     end
-                    local tween = zzTweenService:Create(DropdownContainerFrame,
-                                                        TweenInfo.new(0.3,
-                                                                      Enum.EasingStyle
-                                                                          .Sine),
-                                                        {
+                    local tween = zzTweenService:Create(DropdownContainerFrame, TweenInfo.new(0.3, Enum.EasingStyle.Sine), {
                         Size = UDim2.new(0, 297, 0, 0.2)
                     })
                     tween:Play()
@@ -1094,14 +1062,7 @@ function Library:Main(GName)
                         wait(0.15)
                         DropdownContainerFrame.Visible = false
                     end)
-                    local tween1 = zzTweenService:Create(DropdownToggle,
-                                                         TweenInfo.new(0.3,
-                                                                       Enum.EasingStyle
-                                                                           .Linear,
-                                                                       Enum.EasingDirection
-                                                                           .In,
-                                                                       0),
-                                                         {Rotation = -90})
+                    local tween1 = zzTweenService:Create(DropdownToggle, TweenInfo.new(0.3, Enum.EasingStyle.Linear,Enum.EasingDirection.In, 0), {Rotation = -90})
                     tween1:Play()
                 end
             end
@@ -1141,8 +1102,6 @@ function Library:Main(GName)
                         pcall(callback, tostring(v))
                         Config[TName][DName] = tostring(v)
                         Ripple(Example)
-                        wait(0.3)
-                        closeOpen()
                     end
                 end)
             end
@@ -1698,13 +1657,14 @@ function Library:Main(GName)
     end
 
     function TabLibrary:NewConfigTab(CustomCredits) --messy xd
+        local Path = "RealZzHub/" .. game.GameId
         if not isfolder("RealZzHub") then makefolder("RealZzHub") end
-        if not isfolder("RealZzHub/" .. game.GameId) then
-            makefolder("RealZzHub/" .. game.GameId)
+        if not isfolder(Path) then
+            makefolder(Path)
         end
         local DefaultConfig = Config
         if DefaultConfig then
-            writefile("RealZzHub/" .. game.GameId .. "/default.json", zzHttpService:JSONEncode(DefaultConfig))
+            writefile(Path.."/default.json", zzHttpService:JSONEncode(DefaultConfig))
         end
 
         local configs = {"t"}
@@ -1758,20 +1718,18 @@ function Library:Main(GName)
         end, true)
         ConfigDropdown:Clear()
         wait(0.2)
-        for _, v in pairs(listfiles("RealZzHub/"..game.GameId)) do
-            table.insert(configs, string.split(v,"RealZzHub/"..game.GameId.."\\")[2])
-            ConfigDropdown:AddItem(tostring(string.split(v,"RealZzHub/"..game.GameId.."\\")[2]))
+        for _, v in pairs(listfiles(Path)) do
+            table.insert(configs, string.split(v,Path.."\\")[2])
+            ConfigDropdown:AddItem(tostring(string.split(v,Path.."\\")[2]))
         end
         ConfigDropdown:Set("default.json")
         ConfigTab:NewButton("Load", function()
-            local c = zzHttpService:JSONDecode(readfile("RealZzHub/".. game.GameId.."/"..string.lower(SelectedConfig)))
+            local c = zzHttpService:JSONDecode(readfile(Path.."/"..string.lower(SelectedConfig)))
             for i, v in pairs(c) do
                 if Functions[i] and type(v) == "table" then
                     for x, y in pairs(v) do
-                        if Functions[i][x] then
-                            pcall(function() --pcall just incase, cuz random shit be breaking the whole config. not bothered to replicate the actual issue or search for it so a temporary fix
-                                Functions[i][x]:Set(y)
-                            end)
+                        if Functions[i][x] and y ~= nil then
+                            pcall(Functions[i][x].Set, Functions[i][x], y)
                         end
                     end
                 end
@@ -1781,13 +1739,13 @@ function Library:Main(GName)
             if string.lower(SelectedConfig) == "default.json" then
                 TabLibrary:Notify("default.json cannot be removed!", 2)
             else
-                delfile("RealZzHub/"..game.GameId.."/"..string.lower(SelectedConfig))
+                delfile(Path.."/"..string.lower(SelectedConfig))
                 configs = {}
                 ConfigDropdown:Clear()
-                wait(1)
-                for _, v in pairs(listfiles("RealZzHub/" .. game.GameId)) do
-                    table.insert(configs, string.split(v,"RealZzHub/"..game.GameId.."\\")[2])
-                    ConfigDropdown:AddItem(tostring(string.split(v,"RealZzHub/"..game.GameId .."\\")[2]))
+                wait(0.4)
+                for _, v in pairs(listfiles(Path)) do
+                    table.insert(configs, string.split(v,Path..game.GameId.."\\")[2])
+                    ConfigDropdown:AddItem(tostring(string.split(v,Path.."\\")[2]))
                 end
                 ConfigDropdown:Set(configs[1])
             end
@@ -1796,20 +1754,20 @@ function Library:Main(GName)
             if string.lower(SelectedConfig) == "default.json" then
                 TabLibrary:Notify("Default.json cannot be overwriten!", 2)
             else
-                writefile("RealZzHub/"..game.GameId .."/"..string.lower(SelectedConfig),zzHttpService:JSONEncode(Config))
+                writefile(Path.."/"..string.lower(SelectedConfig),zzHttpService:JSONEncode(Config))
             end
         end)
         ConfigTab:NewTextBox("Config Name", function(v) 
             NM = string.lower(v) 
         end, "...", true)
         ConfigTab:NewButton("Create", function()
-            if isfile("RealZzHub/"..game.GameId .."/"..string.lower(NM)..".json") or string.lower(NM) == "default" then
+            if isfile(Path.."/"..string.lower(NM)..".json") or string.lower(NM) == "default" then
                 TabLibrary:Notify("Config already exists!", 2)
             else
-                writefile("RealZzHub/"..game.GameId.."/"..string.lower(NM)..".json",zzHttpService:JSONEncode(Config))
+                writefile(Path.."/"..string.lower(NM)..".json",zzHttpService:JSONEncode(Config))
                 configs = {}
                 ConfigDropdown:Clear()
-                wait(1)
+                wait(0.4)
                 for _, v in pairs(listfiles("RealZzHub/"..game.GameId)) do
                     table.insert(configs, string.split(v,"RealZzHub/"..game.GameId.."\\")[2])
                     ConfigDropdown:AddItem(tostring(string.split(v,"RealZzHub/"..game.GameId.."\\")[2]))
