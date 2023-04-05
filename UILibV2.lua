@@ -210,12 +210,9 @@ function Library:Main(GName)
 
     Notifications.Name = "Notifications"
 
-    TabUIListLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(
-        function()
-            TabContainer.CanvasSize = UDim2.new(0, 0, 0,
-                                                TabUIListLayout.AbsoluteContentSize
-                                                    .Y)
-        end)
+    TabUIListLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
+            TabContainer.CanvasSize = UDim2.new(0, 0, 0, TabUIListLayout.AbsoluteContentSize.Y)
+    end)
 
     local FirstTab = true
     local Functions = {}
@@ -1713,6 +1710,7 @@ function Library:Main(GName)
             RainbowSpeed = 11-v
         end, 7)
         ConfigTab:NewLabel("Configs", true)
+        ConfigTab:NewLabel("Path: "..Path)
         local ConfigDropdown = ConfigTab:NewDropdown("Configs", configs, function(v)
             SelectedConfig = v
         end, true)
