@@ -138,7 +138,7 @@ function Library:Main(GName)
     Drag(MainBackground)
 
     zzUIS.InputBegan:connect(function(key)
-        if key.KeyCode == Enum.KeyCode.RightControl then
+        if key.KeyCode.Name == "RightControl" or key.KeyCode.Name == "LeftControl" then --UWP CRINGE
             MainBackground.Visible = not MainBackground.Visible
         end
     end)
