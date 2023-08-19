@@ -20,6 +20,8 @@ end)
 
 local RainbowSpeed = 7
 local Theme = Themes[1]
+local ToggleKeybind = "LeftControl"
+local IsFocused = false
 local IList = {} --we do trolling cuz its 11pm and I want to sleep
 
 function Ripple(Button) -- thanks xbox | edited a little for this ui lib | Hey buy falconss uwu
@@ -137,8 +139,8 @@ function Library:Main(GName)
     MainBackground.Image = "rbxassetid://7877641241"
     Drag(MainBackground)
 
-    zzUIS.InputBegan:connect(function(key)
-        if key.KeyCode.Name == "RightControl" or key.KeyCode.Name == "LeftControl" then --UWP CRINGE
+    zzUIS.InputBegan:connect(function(v)
+        if (v.KeyCode.Name == "RightControl" or v.KeyCode.Name == ToggleKeybind) and not IsFocused then --UWP CRINGE
             MainBackground.Visible = not MainBackground.Visible
         end
     end)
@@ -934,12 +936,15 @@ function Library:Main(GName)
             end)
 
             Keybind.MouseButton1Click:connect(function()
+                IsFocused = true
                 Keybind.Text = "[ ... ]"
                 Ripple(KeybindFrame)
                 local i = zzUIS.InputBegan:wait()
                 Keybind.Text = "[ "..tostring((i.UserInputType == Enum.UserInputType.Keyboard and i.KeyCode.Name) or i.UserInputType.Name) .. " ]"
                 CurrentKey = tostring((i.UserInputType == Enum.UserInputType.Keyboard and i.KeyCode.Name) or i.UserInputType.Name)
                 Config[TName][KName] = (i.UserInputType == Enum.UserInputType.Keyboard and i.KeyCode.Name) or i.UserInputType.Name
+                wait()
+                IsFocused = false
             end)
             local KeybindLibrary = {}
             function KeybindLibrary:Set(v)
@@ -1709,6 +1714,10 @@ function Library:Main(GName)
         ConfigTab:NewSlider("Rainbow Speed", 1,10,1,function(v)
             RainbowSpeed = 11-v
         end, 7)
+        ConfigTab:NewKeybind("Toggle UI", Enum.KeyCode[ToggleKeybind], function(v)
+            ToggleKeybind = v.Name
+        end)
+        
         ConfigTab:NewLabel("Configs", true)
         ConfigTab:NewLabel("Path: "..Path)
         local ConfigDropdown = ConfigTab:NewDropdown("Configs", configs, function(v)
